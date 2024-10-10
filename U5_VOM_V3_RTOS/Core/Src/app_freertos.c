@@ -23,6 +23,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "main.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -146,41 +147,17 @@ void StartDefaultTask(void *argument)
 * @param argument: Not used
 * @retval None
 */
-unsigned int temp_val = 0xffffffff;
-unsigned int temp_volt = 0xffffffff;
+
 /* USER CODE END Header_StartSendAdcTask */
 void StartSendAdcTask(void *argument)
 {
   /* USER CODE BEGIN mySendAdcTask */
+
   /* Infinite loop */
   for(;;)
   {
-
-#if 0
-	  if(hADCxConvertedData_Temperature_DegreeCelsius != temp_val)
-	  {
-		  temp_val = hADCxConvertedData_Temperature_DegreeCelsius;
-		  if(temp_val > 100)
-		  {
-			  HAL_Delay(1);
-		  }
-		  UiData_t newUiData;
-		  newUiData.Id = TEMP_VAL_ID;
-		  newUiData.Data = temp_val;
-		  osMessageQueuePut(myUiDataQueueHandle, &newUiData, 0, 10);
-	  }
-
-	  if(uhADCxConvertedData_Voltage_mVolt != temp_volt)
-	  {
-		  temp_volt = uhADCxConvertedData_Voltage_mVolt;
-		  UiData_t newUiData;
-		  newUiData.Id = V_VAL_ID;
-		  newUiData.Data = temp_volt;
-		  osMessageQueuePut(myUiDataQueueHandle, &newUiData, 0, 10);
-
-	  }
-#endif
-	  osDelay(300);
+	  convert_temp();
+	  osDelay(30);
   }
   /* USER CODE END mySendAdcTask */
 }

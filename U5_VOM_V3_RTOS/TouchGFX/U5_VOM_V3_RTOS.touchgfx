@@ -3,63 +3,36 @@
     "Screens": [
       {
         "Name": "Screen1",
+        "CanvasBufferSize": 3600,
         "Components": [
           {
             "Type": "Box",
             "Name": "box1",
             "Width": 240,
-            "Height": 326,
+            "Height": 320,
             "Color": {
-              "Red": 207,
-              "Green": 240,
-              "Blue": 117
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
             }
-          },
-          {
-            "Type": "Gauge",
-            "Name": "gauge1",
-            "Y": 81,
-            "Width": 240,
-            "Height": 245,
-            "Preset": "alternate_theme\\presets\\gauges\\medium\\active.json",
-            "FileNameBackground": "__generated\\alternate_theme_images_widgets_gauge_medium_backgrounds_active.png",
-            "RotationCenterX": 120.0,
-            "RotationCenterY": 120.0,
-            "StartAngle": -113.0,
-            "EndAngle": 112.0,
-            "RangeMax": 100.0,
-            "InitialValue": 50.0,
-            "Easing": "Linear",
-            "EasingOption": "In",
-            "FileNameNeedle": "__generated\\alternate_theme_images_widgets_gauge_medium_needles_smooth.png",
-            "NeedleRotationCenterX": 7.0,
-            "NeedleRotationCenterY": 67.0,
-            "NeedleMovingRenderingAlgorithm": "Bilinear Interpolation",
-            "NeedleSteadyRenderingAlgorithm": "Bilinear Interpolation",
-            "ArcColor": {
-              "Red": 20,
-              "Green": 151,
-              "Blue": 197
-            },
-            "ArcCapStyle": "Butt"
           },
           {
             "Type": "Box",
             "Name": "box2",
             "Width": 240,
-            "Height": 67,
+            "Height": 97,
             "Color": {
-              "Red": 164,
-              "Green": 235,
-              "Blue": 212
+              "Red": 219,
+              "Green": 219,
+              "Blue": 219
             }
           },
           {
             "Type": "TextArea",
             "Name": "textAreaTemp",
             "X": 135,
-            "Y": 49,
-            "Width": 93,
+            "Y": 74,
+            "Width": 99,
             "Height": 12,
             "TextId": "__SingleUse_O79F",
             "TextRotation": "0",
@@ -67,14 +40,14 @@
             "Wildcard1": {
               "TextId": "__SingleUse_U2NK",
               "UseBuffer": true,
-              "BufferSize": 4
+              "BufferSize": 5
             }
           },
           {
             "Type": "TextArea",
             "Name": "textAreaVolt",
             "X": 6,
-            "Y": 49,
+            "Y": 74,
             "Width": 76,
             "Height": 12,
             "TextId": "__SingleUse_J8LP",
@@ -93,6 +66,181 @@
             "Width": 178,
             "Height": 20,
             "TextId": "__SingleUse_2HIB",
+            "TextRotation": "0",
+            "AutoSize": true
+          },
+          {
+            "Type": "DynamicGraph",
+            "Name": "dynamicGraph1",
+            "X": 31,
+            "Y": 119,
+            "Width": 203,
+            "Height": 76,
+            "DataSeed": -1567757659,
+            "NumberOfValues": 25,
+            "MaxY": 4.0,
+            "Precision": "0.1",
+            "LastIndex": 24,
+            "MapDataPointIndexToCustomValue": true,
+            "XAxisScale": 1.0,
+            "InsertRandomValues": true,
+            "GraphType": "GraphWrapOverwrite",
+            "VerticalFrontline": {
+              "Type": "GraphVerticalFrontline",
+              "Color": {
+                "Red": 255
+              },
+              "GapLineWidth": 1
+            },
+            "GraphDrawers": [
+              {
+                "Type": "LineDrawer",
+                "LineWidth": 2,
+                "FileNameImage": "",
+                "Color": {
+                  "Red": 22,
+                  "Green": 196,
+                  "Blue": 33
+                }
+              }
+            ],
+            "YAxisGrid": {
+              "Type": "GraphGrid",
+              "Interval": 2.0,
+              "LineWidth": 1
+            }
+          },
+          {
+            "Type": "DynamicGraph",
+            "Name": "dynamicGraph2",
+            "X": 31,
+            "Y": 233,
+            "Width": 203,
+            "Height": 76,
+            "DataSeed": -1567757659,
+            "NumberOfValues": 25,
+            "MaxY": 100.0,
+            "Precision": "0.1",
+            "LastIndex": 24,
+            "MapDataPointIndexToCustomValue": true,
+            "XAxisScale": 1.0,
+            "InsertRandomValues": true,
+            "GraphType": "GraphWrapOverwrite",
+            "VerticalFrontline": {
+              "Type": "GraphVerticalFrontline",
+              "Color": {
+                "Red": 255
+              },
+              "GapLineWidth": 1
+            },
+            "GraphDrawers": [
+              {
+                "Type": "LineDrawer",
+                "LineWidth": 2,
+                "FileNameImage": "",
+                "Color": {
+                  "Red": 147,
+                  "Green": 31,
+                  "Blue": 173
+                }
+              }
+            ],
+            "YAxisGrid": {
+              "Type": "GraphGrid",
+              "Color": {
+                "Red": 3,
+                "Green": 3,
+                "Blue": 3
+              },
+              "Interval": 25.0,
+              "LineWidth": 1
+            }
+          },
+          {
+            "Type": "TextArea",
+            "Name": "textArea4",
+            "X": 6,
+            "Y": 97,
+            "Width": 40,
+            "Height": 12,
+            "TextId": "__SingleUse_FGFY",
+            "TextRotation": "0",
+            "AutoSize": true
+          },
+          {
+            "Type": "TextArea",
+            "Name": "textArea4_2",
+            "X": 6,
+            "Y": 211,
+            "Width": 61,
+            "Height": 12,
+            "TextId": "__SingleUse_5K6I",
+            "TextRotation": "0",
+            "AutoSize": true
+          },
+          {
+            "Type": "TextArea",
+            "Name": "textArea4_1",
+            "X": 6,
+            "Y": 152,
+            "Width": 6,
+            "Height": 12,
+            "TextId": "__SingleUse_F7VS",
+            "TextRotation": "0",
+            "AutoSize": true
+          },
+          {
+            "Type": "TextArea",
+            "Name": "textArea4_1_1_1_2",
+            "X": 6,
+            "Y": 114,
+            "Width": 6,
+            "Height": 12,
+            "TextId": "__SingleUse_BPQY",
+            "TextRotation": "0",
+            "AutoSize": true
+          },
+          {
+            "Type": "TextArea",
+            "Name": "textArea4_1_1_1_1",
+            "X": 6,
+            "Y": 189,
+            "Width": 6,
+            "Height": 12,
+            "TextId": "__SingleUse_88JH",
+            "TextRotation": "0",
+            "AutoSize": true
+          },
+          {
+            "Type": "TextArea",
+            "Name": "textArea4_1_1",
+            "X": 6,
+            "Y": 266,
+            "Width": 12,
+            "Height": 12,
+            "TextId": "__SingleUse_SCUA",
+            "TextRotation": "0",
+            "AutoSize": true
+          },
+          {
+            "Type": "TextArea",
+            "Name": "textArea4_1_1_1_2_1",
+            "X": 6,
+            "Y": 228,
+            "Width": 18,
+            "Height": 12,
+            "TextId": "__SingleUse_1Y1G",
+            "TextRotation": "0",
+            "AutoSize": true
+          },
+          {
+            "Type": "TextArea",
+            "Name": "textArea4_1_1_1_1_1",
+            "X": 6,
+            "Y": 303,
+            "Width": 6,
+            "Height": 12,
+            "TextId": "__SingleUse_IFBT",
             "TextRotation": "0",
             "AutoSize": true
           }

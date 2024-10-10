@@ -22,19 +22,27 @@ void Screen1View::updateTemp(unsigned int val)
 	memset((void*)textAreaTempBuffer, 0, TEXTAREATEMP_SIZE*2);
 
 	Unicode::snprintf(textAreaTempBuffer,TEXTAREATEMP_SIZE, "%d", val);
-	if(val > 100)
-	{
-		textAreaTemp.invalidate();
-	}
+
 	textAreaTemp.invalidate();
 
+	dynamicGraph2.addDataPoint((float)val);
+	dynamicGraph2.invalidate();
+
+
 }
+
 void Screen1View::updateVolt(unsigned int val)
 {
 	//update ui.
 	memset((void*)textAreaVoltBuffer, 0, TEXTAREAVOLT_SIZE*2);
 	Unicode::snprintf(textAreaVoltBuffer,TEXTAREAVOLT_SIZE, "%d", val);
 	textAreaVolt.invalidate();
+	//3300 - 100
+	//val - x
+	float gval = ((float)val)/1000; //in V
+	dynamicGraph1.addDataPoint(gval);
+	dynamicGraph1.invalidate();
+
 
 }
 

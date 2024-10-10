@@ -33,17 +33,18 @@ extern "C" {
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "z_displ_ILI9XXX.h"
-extern uint8_t update_ui;
-extern uint32_t adc_value;
-extern __IO  int16_t hADCxConvertedData_Temperature_DegreeCelsius;
-extern __IO float uhADCxConvertedData_Voltage_mVolt;
 
-#define APP_FPS 40
 
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
+
+#define ADC1_USED_CHANNEL 2
+extern uint16_t ADC1_VAL[ADC1_USED_CHANNEL];
+
+extern int32_t temp_sense;
+extern int32_t in1_diff_voltage;
 
 /* USER CODE END ET */
 
@@ -61,7 +62,7 @@ extern __IO float uhADCxConvertedData_Voltage_mVolt;
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-
+void convert_temp(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
@@ -89,7 +90,6 @@ extern uint8_t update_ui;
 #define RST_H() HAL_GPIO_WritePin(DISPL_RST_GPIO_Port, DISPL_RST_Pin, GPIO_PIN_SET)
 #define LED_H() HAL_GPIO_WritePin(DISPL_LED_GPIO_Port, DISPL_LED_Pin, GPIO_PIN_SET)
 #define LED_L() HAL_GPIO_WritePin(DISPL_LED_GPIO_Port, DISPL_LED_Pin, GPIO_PIN_RESET)
-
 
 
 /* USER CODE END Private defines */

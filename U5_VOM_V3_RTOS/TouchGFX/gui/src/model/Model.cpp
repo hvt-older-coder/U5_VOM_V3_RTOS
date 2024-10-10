@@ -1,7 +1,9 @@
 #include <gui/model/Model.hpp>
 #include <gui/model/ModelListener.hpp>
+#ifndef SIMULATOR
 #include "main.h"
 #include "app_freertos.h"
+#endif
 Model::Model() : modelListener(0)
 {
 
@@ -9,16 +11,9 @@ Model::Model() : modelListener(0)
 
 void Model::tick()
 {
-	//Get the temp value.
-	UiData_t uiData;
-	osMessageQueueGet(myUiDataQueueHandle, &uiData, 0, 10);
-	if(uiData.Id == TEMP_VAL_ID)
-	{
+#ifndef SIMULATOR
+	modelListener->updateVolt(in1_diff_voltage);
+	modelListener->updateTemp(temp_sense);
+#endif
 
-		modelListener->updateTemp(uiData.Data);
-	}
-	if(uiData.Id == V_VAL_ID)
-	{
-		modelListener->updateVolt(uiData.Data);
-	}
 }

@@ -1,20 +1,20 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2024 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file           : main.c
+ * @brief          : Main program body
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2024 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
@@ -64,7 +64,8 @@ TIM_HandleTypeDef htim3;
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-uint8_t ADC_BUFFER[8];
+
+uint16_t ADC1_VAL[ADC1_USED_CHANNEL] = {0,0};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -133,19 +134,27 @@ int main(void)
   /* Initialize interrupts */
   MX_NVIC_Init();
   /* USER CODE BEGIN 2 */
-  Displ_Init(Displ_Orientat_0);		// initialize the display and set the initial display orientation (here is orientaton: 0°) - THIS FUNCTION MUST PRECEED ANY OTHER DISPLAY FUNCTION CALL.
-  Displ_BackLight('1');  			// initialize backlight and turn it on at init level
-  touchgfxSignalVSync();
-  if(HAL_TIM_Base_Start_IT(&TGFX_T) != HAL_OK)
-  {
-	  Error_Handler();
-  }
-  HAL_ADCEx_Calibration_Start(&hadc1, ADC_CALIB_OFFSET, ADC_SINGLE_ENDED);
-  if(HAL_ADC_Start_DMA(&hadc1, (uint32_t*)ADC_BUFFER, 8) != HAL_OK)
-  {
-	  Error_Handler();
-  }
+	Displ_Init(Displ_Orientat_0);// initialize the display and set the initial display orientation (here is orientaton: 0°) - THIS FUNCTION MUST PRECEED ANY OTHER DISPLAY FUNCTION CALL.
+	Displ_BackLight('1');  	// initialize backlight and turn it on at init level
+	touchgfxSignalVSync();
+	if (HAL_TIM_Base_Start_IT(&TGFX_T) != HAL_OK) {
+		Error_Handler();
+	}
 
+
+	if(HAL_ADCEx_Calibration_Start(&hadc1, ADC_CALIB_OFFSET, ADC_SINGLE_ENDED) != HAL_OK)
+  {
+	  Error_Handler();
+  }
+	HAL_Delay(10);
+
+  if(HAL_ADC_Start_DMA(&hadc1, (void*)&ADC1_VAL, ADC1_USED_CHANNEL) != HAL_OK)
+	{
+	  Error_Handler();
+	}
+	//test TS_CAL1 & CAL2
+	//uint16_t ts_cal1 = TEMPSENSOR_CAL1_ADDR;
+	//uint16_t ts_cal2 = TEMPSENSOR_CAL2_ADDR;
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -164,12 +173,11 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
+	while (1) {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-  }
+	}
   /* USER CODE END 3 */
 }
 
@@ -285,15 +293,15 @@ static void MX_ADC1_Init(void)
   /** Common config
   */
   hadc1.Instance = ADC1;
-  hadc1.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV64;
-  hadc1.Init.Resolution = ADC_RESOLUTION_12B;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV4;
+  hadc1.Init.Resolution = ADC_RESOLUTION_14B;
   hadc1.Init.GainCompensation = 0;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;
+  hadc1.Init.ScanConvMode = ADC_SCAN_ENABLE;
   hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
   hadc1.Init.LowPowerAutoWait = DISABLE;
   hadc1.Init.ContinuousConvMode = ENABLE;
-  hadc1.Init.NbrOfConversion = 1;
+  hadc1.Init.NbrOfConversion = 2;
   hadc1.Init.DiscontinuousConvMode = DISABLE;
   hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
   hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
@@ -310,18 +318,27 @@ static void MX_ADC1_Init(void)
 
   /** Configure Regular Channel
   */
-  sConfig.Channel = ADC_CHANNEL_1;
+  sConfig.Channel = ADC_CHANNEL_TEMPSENSOR;
   sConfig.Rank = ADC_REGULAR_RANK_1;
   sConfig.SamplingTime = ADC_SAMPLETIME_814CYCLES;
-  sConfig.SingleDiff = ADC_DIFFERENTIAL_ENDED;
+  sConfig.SingleDiff = ADC_SINGLE_ENDED;
   sConfig.OffsetNumber = ADC_OFFSET_NONE;
   sConfig.Offset = 0;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
     Error_Handler();
   }
-  /* USER CODE BEGIN ADC1_Init 2 */
 
+  /** Configure Regular Channel
+  */
+  sConfig.Channel = ADC_CHANNEL_1;
+  sConfig.Rank = ADC_REGULAR_RANK_2;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN ADC1_Init 2 */
+  ADC12_COMMON->CCR |= ADC_CCR_VSENSEEN;
   /* USER CODE END ADC1_Init 2 */
 
 }
@@ -380,8 +397,8 @@ static void MX_GPDMA1_Init(void)
 
   /* USER CODE END GPDMA1_Init 1 */
   /* USER CODE BEGIN GPDMA1_Init 2 */
-    //handle_GPDMA1_Channel11.Init.SrcDataWidth = DMA_SRC_DATAWIDTH_BYTE;
-    //handle_GPDMA1_Channel11.Init.DestDataWidth  = DMA_SRC_DATAWIDTH_BYTE;
+	//handle_GPDMA1_Channel11.Init.SrcDataWidth = DMA_SRC_DATAWIDTH_BYTE;
+	//handle_GPDMA1_Channel11.Init.DestDataWidth  = DMA_SRC_DATAWIDTH_BYTE;
   /* USER CODE END GPDMA1_Init 2 */
 
 }
@@ -496,7 +513,7 @@ static void MX_TIM3_Init(void)
   htim3.Instance = TIM3;
   htim3.Init.Prescaler = 120-1;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 50000-1;
+  htim3.Init.Period = 33333-1;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
@@ -586,30 +603,25 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-
 static int count_1s = 0;
+int32_t temp_sense = 0;
+int32_t in1_diff_voltage = 0;
 
+void convert_temp(void){
+	temp_sense = __HAL_ADC_CALC_TEMPERATURE(hadc1.Instance, 3300UL, ADC1_VAL[0], LL_ADC_RESOLUTION_14B);
+	//in1_diff_voltage = __HAL_ADC_CALC_DIFF_DATA_TO_VOLTAGE(hadc1.Instance, 3300UL, ADC1_VAL[1], LL_ADC_RESOLUTION_14B);
+	in1_diff_voltage = __LL_ADC_CALC_DATA_TO_VOLTAGE(hadc1.Instance, 3300UL, ADC1_VAL[1], LL_ADC_RESOLUTION_14B);
+}
+
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
+{
+
+}
 /**
-  * @brief  Conversion DMA half-transfer callback in non-blocking mode
-  * @param  hadc: ADC handle
-  * @retval None
-  */
-#define VDDA_APPLI                       ((uint32_t)3300)
-#define VAR_CONVERTED_DATA_INIT_VALUE    (__LL_ADC_DIGITAL_SCALE(LL_ADC_RESOLUTION_12B) + 1)
-uint32_t uhADCxConvertedData = 0;
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
-{
-  /* Add code to be performed after DMA full complete */
-	HAL_Delay(0);
-
-
-
-}
-void HAL_ADC_ErrorCallback(ADC_HandleTypeDef *hadc)
-{
-
-	Error_Handler();
-}
+ * @brief  Conversion DMA half-transfer callback in non-blocking mode
+ * @param  hadc: ADC handle
+ * @retval None
+ */
 /* USER CODE END 4 */
 
 /**
@@ -630,14 +642,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   }
   /* USER CODE BEGIN Callback 1 */
 
-  else if (htim == &TGFX_T) {
-  		touchgfxSignalVSync();
-  		if(count_1s++ == 20){
-		  BSP_LED_Toggle(LED_GREEN);
-		  count_1s = 0;
-	  }
-  	}
-
+	else if (htim == &TGFX_T) {
+		touchgfxSignalVSync();
+		if (count_1s++ == 20) {
+			BSP_LED_Toggle(LED_GREEN);
+			count_1s = 0;
+		}
+	}
 
   /* USER CODE END Callback 1 */
 }
@@ -649,11 +660,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
-  __disable_irq();
-  while (1)
-  {
-  }
+	/* User can add his own implementation to report the HAL error return state */
+	__disable_irq();
+	while (1) {
+	}
   /* USER CODE END Error_Handler_Debug */
 }
 
