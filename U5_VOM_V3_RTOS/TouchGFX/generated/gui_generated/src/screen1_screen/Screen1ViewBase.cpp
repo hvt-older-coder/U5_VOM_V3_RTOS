@@ -15,7 +15,7 @@ Screen1ViewBase::Screen1ViewBase()
     add(__background);
 
     box1.setPosition(0, 0, 240, 320);
-    box1.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
+    box1.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
     add(box1);
 
     box2.setPosition(0, 0, 240, 97);
@@ -40,20 +40,12 @@ Screen1ViewBase::Screen1ViewBase()
     textAreaVolt.setTypedText(touchgfx::TypedText(T___SINGLEUSE_J8LP));
     add(textAreaVolt);
 
-    textArea3.setXY(31, 0);
-    textArea3.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
-    textArea3.setLinespacing(0);
-    textArea3.setTypedText(touchgfx::TypedText(T___SINGLEUSE_2HIB));
-    add(textArea3);
-
-    dynamicGraph1.setPosition(31, 119, 203, 76);
+    dynamicGraph1.setPosition(18, 119, 216, 100);
     dynamicGraph1.setScale(10);
-    dynamicGraph1.setXAxisFactor(1);
-    dynamicGraph1.setXAxisOffset(0);
     dynamicGraph1.setGraphAreaMargin(0, 0, 0, 0);
     dynamicGraph1.setGraphAreaPadding(0, 0, 0, 0);
     dynamicGraph1.setGraphRangeY(0, 4);
-    dynamicGraph1MajorYAxisGrid.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
+    dynamicGraph1MajorYAxisGrid.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
     dynamicGraph1MajorYAxisGrid.setInterval(2);
     dynamicGraph1MajorYAxisGrid.setLineWidth(1);
     dynamicGraph1MajorYAxisGrid.setScale(10);
@@ -64,87 +56,8 @@ Screen1ViewBase::Screen1ViewBase()
     dynamicGraph1Line1.setLineWidth(2);
     dynamicGraph1.addGraphElement(dynamicGraph1Line1);
 
-    dynamicGraph1VerticalFrontline.setColor(touchgfx::Color::getColorFromRGB(255, 0, 0));
-    dynamicGraph1VerticalFrontline.setGapLineWidth(1);
-    dynamicGraph1.addGraphElement(dynamicGraph1VerticalFrontline);
 
-
-    dynamicGraph1.addDataPoint(2.95066f);
-    dynamicGraph1.addDataPoint(3.79379f);
-    dynamicGraph1.addDataPoint(1.52468f);
-    dynamicGraph1.addDataPoint(1.2278f);
-    dynamicGraph1.addDataPoint(2.02197f);
-    dynamicGraph1.addDataPoint(0.60068f);
-    dynamicGraph1.addDataPoint(1.23838f);
-    dynamicGraph1.addDataPoint(3.53298f);
-    dynamicGraph1.addDataPoint(2.693f);
-    dynamicGraph1.addDataPoint(2.07269f);
-    dynamicGraph1.addDataPoint(3.08029f);
-    dynamicGraph1.addDataPoint(1.40097f);
-    dynamicGraph1.addDataPoint(0.10393f);
-    dynamicGraph1.addDataPoint(1.9729f);
-    dynamicGraph1.addDataPoint(2.16159f);
-    dynamicGraph1.addDataPoint(1.64855f);
-    dynamicGraph1.addDataPoint(3.54788f);
-    dynamicGraph1.addDataPoint(3.28163f);
-    dynamicGraph1.addDataPoint(1.05971f);
-    dynamicGraph1.addDataPoint(1.61547f);
-    dynamicGraph1.addDataPoint(1.7456f);
-    dynamicGraph1.addDataPoint(0.37112f);
-    dynamicGraph1.addDataPoint(2.02429f);
-    dynamicGraph1.addDataPoint(3.62411f);
-    dynamicGraph1.addDataPoint(2.23132f);
     add(dynamicGraph1);
-
-    dynamicGraph2.setPosition(31, 233, 203, 76);
-    dynamicGraph2.setScale(10);
-    dynamicGraph2.setXAxisFactor(1);
-    dynamicGraph2.setXAxisOffset(0);
-    dynamicGraph2.setGraphAreaMargin(0, 0, 0, 0);
-    dynamicGraph2.setGraphAreaPadding(0, 0, 0, 0);
-    dynamicGraph2.setGraphRangeY(0, 100);
-    dynamicGraph2MajorYAxisGrid.setColor(touchgfx::Color::getColorFromRGB(3, 3, 3));
-    dynamicGraph2MajorYAxisGrid.setInterval(25);
-    dynamicGraph2MajorYAxisGrid.setLineWidth(1);
-    dynamicGraph2MajorYAxisGrid.setScale(10);
-    dynamicGraph2.addGraphElement(dynamicGraph2MajorYAxisGrid);
-
-    dynamicGraph2Line1Painter.setColor(touchgfx::Color::getColorFromRGB(147, 31, 173));
-    dynamicGraph2Line1.setPainter(dynamicGraph2Line1Painter);
-    dynamicGraph2Line1.setLineWidth(2);
-    dynamicGraph2.addGraphElement(dynamicGraph2Line1);
-
-    dynamicGraph2VerticalFrontline.setColor(touchgfx::Color::getColorFromRGB(255, 0, 0));
-    dynamicGraph2VerticalFrontline.setGapLineWidth(1);
-    dynamicGraph2.addGraphElement(dynamicGraph2VerticalFrontline);
-
-
-    dynamicGraph2.addDataPoint(73.76651f);
-    dynamicGraph2.addDataPoint(94.84482f);
-    dynamicGraph2.addDataPoint(38.11695f);
-    dynamicGraph2.addDataPoint(30.69488f);
-    dynamicGraph2.addDataPoint(50.5493f);
-    dynamicGraph2.addDataPoint(15.01712f);
-    dynamicGraph2.addDataPoint(30.95942f);
-    dynamicGraph2.addDataPoint(88.32439f);
-    dynamicGraph2.addDataPoint(67.32493f);
-    dynamicGraph2.addDataPoint(51.81733f);
-    dynamicGraph2.addDataPoint(77.00725f);
-    dynamicGraph2.addDataPoint(35.02423f);
-    dynamicGraph2.addDataPoint(2.5982f);
-    dynamicGraph2.addDataPoint(49.32259f);
-    dynamicGraph2.addDataPoint(54.03979f);
-    dynamicGraph2.addDataPoint(41.2137f);
-    dynamicGraph2.addDataPoint(88.69701f);
-    dynamicGraph2.addDataPoint(82.04074f);
-    dynamicGraph2.addDataPoint(26.49277f);
-    dynamicGraph2.addDataPoint(40.38668f);
-    dynamicGraph2.addDataPoint(43.6399f);
-    dynamicGraph2.addDataPoint(9.2779f);
-    dynamicGraph2.addDataPoint(50.60724f);
-    dynamicGraph2.addDataPoint(90.60287f);
-    dynamicGraph2.addDataPoint(55.78295f);
-    add(dynamicGraph2);
 
     textArea4.setXY(6, 97);
     textArea4.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
@@ -152,47 +65,23 @@ Screen1ViewBase::Screen1ViewBase()
     textArea4.setTypedText(touchgfx::TypedText(T___SINGLEUSE_FGFY));
     add(textArea4);
 
-    textArea4_2.setXY(6, 211);
-    textArea4_2.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
-    textArea4_2.setLinespacing(0);
-    textArea4_2.setTypedText(touchgfx::TypedText(T___SINGLEUSE_5K6I));
-    add(textArea4_2);
-
-    textArea4_1.setXY(6, 152);
-    textArea4_1.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
+    textArea4_1.setXY(6, 163);
+    textArea4_1.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
     textArea4_1.setLinespacing(0);
     textArea4_1.setTypedText(touchgfx::TypedText(T___SINGLEUSE_F7VS));
     add(textArea4_1);
 
-    textArea4_1_1_1_2.setXY(6, 114);
-    textArea4_1_1_1_2.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
+    textArea4_1_1_1_2.setXY(6, 111);
+    textArea4_1_1_1_2.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
     textArea4_1_1_1_2.setLinespacing(0);
     textArea4_1_1_1_2.setTypedText(touchgfx::TypedText(T___SINGLEUSE_BPQY));
     add(textArea4_1_1_1_2);
 
-    textArea4_1_1_1_1.setXY(6, 189);
-    textArea4_1_1_1_1.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
+    textArea4_1_1_1_1.setXY(6, 213);
+    textArea4_1_1_1_1.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
     textArea4_1_1_1_1.setLinespacing(0);
     textArea4_1_1_1_1.setTypedText(touchgfx::TypedText(T___SINGLEUSE_88JH));
     add(textArea4_1_1_1_1);
-
-    textArea4_1_1.setXY(6, 266);
-    textArea4_1_1.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
-    textArea4_1_1.setLinespacing(0);
-    textArea4_1_1.setTypedText(touchgfx::TypedText(T___SINGLEUSE_SCUA));
-    add(textArea4_1_1);
-
-    textArea4_1_1_1_2_1.setXY(6, 228);
-    textArea4_1_1_1_2_1.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
-    textArea4_1_1_1_2_1.setLinespacing(0);
-    textArea4_1_1_1_2_1.setTypedText(touchgfx::TypedText(T___SINGLEUSE_1Y1G));
-    add(textArea4_1_1_1_2_1);
-
-    textArea4_1_1_1_1_1.setXY(6, 303);
-    textArea4_1_1_1_1_1.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
-    textArea4_1_1_1_1_1.setLinespacing(0);
-    textArea4_1_1_1_1_1.setTypedText(touchgfx::TypedText(T___SINGLEUSE_IFBT));
-    add(textArea4_1_1_1_1_1);
 }
 
 Screen1ViewBase::~Screen1ViewBase()

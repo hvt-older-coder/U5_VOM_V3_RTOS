@@ -6,18 +6,6 @@
   <Texts>
     <TextGroup Id="Group1" />
     <TextGroup Id="Unsorted">
-      <Text Id="__SingleUse_5K6I" Alignment="Left" TypographyId="Small">
-        <Translation Language="GB">Temp-graph</Translation>
-      </Text>
-      <Text Id="__SingleUse_SCUA" Alignment="Left" TypographyId="Small">
-        <Translation Language="GB">50</Translation>
-      </Text>
-      <Text Id="__SingleUse_1Y1G" Alignment="Left" TypographyId="Small">
-        <Translation Language="GB">100</Translation>
-      </Text>
-      <Text Id="__SingleUse_IFBT" Alignment="Left" TypographyId="Small">
-        <Translation Language="GB">0</Translation>
-      </Text>
       <Text Id="__SingleUse_BPQY" Alignment="Left" TypographyId="Small">
         <Translation Language="GB">4</Translation>
       </Text>
@@ -32,9 +20,6 @@
       </Text>
       <Text Id="__SingleUse_U2NK" Alignment="Left" TypographyId="Default">
         <Translation Language="GB">0000</Translation>
-      </Text>
-      <Text Id="__SingleUse_2HIB" Alignment="Left" TypographyId="Default">
-        <Translation Language="GB">RTOS GFX 4.24.1</Translation>
       </Text>
       <Text Id="__SingleUse_D9QQ" Alignment="Left" TypographyId="Small">
         <Translation Language="GB">0000</Translation>

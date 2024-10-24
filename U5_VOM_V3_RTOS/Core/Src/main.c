@@ -23,6 +23,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "linked_list.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -32,7 +33,8 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define PWM_PB6_TIMER TIM4
+int ADC_Busy = 0;
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -43,8 +45,6 @@
 /* Private variables ---------------------------------------------------------*/
 
 ADC_HandleTypeDef hadc1;
-DMA_NodeTypeDef Node_GPDMA1_Channel10;
-DMA_QListTypeDef List_GPDMA1_Channel10;
 DMA_HandleTypeDef handle_GPDMA1_Channel10;
 
 CRC_HandleTypeDef hcrc;
@@ -52,7 +52,9 @@ CRC_HandleTypeDef hcrc;
 SPI_HandleTypeDef hspi1;
 DMA_HandleTypeDef handle_GPDMA1_Channel11;
 
+TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim3;
+TIM_HandleTypeDef htim4;
 
 /* USER CODE BEGIN PV */
 /* USER CODE END PD */
@@ -65,7 +67,9 @@ TIM_HandleTypeDef htim3;
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
 
-uint16_t ADC1_VAL[ADC1_USED_CHANNEL] = {0,0};
+uint16_t adc_val[ADC_MAX_BUFFER];
+uint8_t ADC_Conv_Done = 0;
+extern osMessageQueueId_t myQueueUIHandle;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -78,7 +82,9 @@ static void MX_SPI1_Init(void);
 static void MX_TIM3_Init(void);
 static void MX_CRC_Init(void);
 static void MX_ICACHE_Init(void);
+static void MX_TIM4_Init(void);
 static void MX_ADC1_Init(void);
+static void MX_TIM1_Init(void);
 static void MX_NVIC_Init(void);
 /* USER CODE BEGIN PFP */
 
@@ -86,7 +92,28 @@ static void MX_NVIC_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+/* Variable containing ADC conversions data */
 
+void Start_Generate_PWM_OutputOnTim4Channel1_PB6() {
+	//Timer4 use to generate PWM output.
+	if (HAL_TIM_PWM_Start_IT(&htim4, TIM_CHANNEL_1) != HAL_OK) {
+		Error_Handler();
+	}
+}
+
+void Setup_LCD_For_TouchGFX() {
+	Displ_Init(Displ_Orientat_0); // initialize the display and set the initial display orientation (here is orientaton: 0°) - THIS FUNCTION MUST PRECEED ANY OTHER DISPLAY FUNCTION CALL.
+	Displ_BackLight('1');  	// initialize backlight and turn it on at init level
+	touchgfxSignalVSync();
+	if (HAL_TIM_Base_Start_IT(&TGFX_T) != HAL_OK) {
+		Error_Handler();
+	}
+}
+void Start_ADC_DMA() {
+	if (HAL_OK != HAL_ADC_Start_DMA(&hadc1, (void*) adc_val, ADC_MAX_BUFFER)) {
+		Error_Handler();
+	}
+}
 /* USER CODE END 0 */
 
 /**
@@ -126,7 +153,9 @@ int main(void)
   MX_TIM3_Init();
   MX_CRC_Init();
   MX_ICACHE_Init();
+  MX_TIM4_Init();
   MX_ADC1_Init();
+  MX_TIM1_Init();
   MX_TouchGFX_Init();
   /* Call PreOsInit function */
   MX_TouchGFX_PreOSInit();
@@ -134,27 +163,20 @@ int main(void)
   /* Initialize interrupts */
   MX_NVIC_Init();
   /* USER CODE BEGIN 2 */
-	Displ_Init(Displ_Orientat_0);// initialize the display and set the initial display orientation (here is orientaton: 0°) - THIS FUNCTION MUST PRECEED ANY OTHER DISPLAY FUNCTION CALL.
-	Displ_BackLight('1');  	// initialize backlight and turn it on at init level
-	touchgfxSignalVSync();
-	if (HAL_TIM_Base_Start_IT(&TGFX_T) != HAL_OK) {
+	Setup_LCD_For_TouchGFX();
+	//Gen PWM_PB0
+	Start_Generate_PWM_OutputOnTim4Channel1_PB6();
+	/* Perform ADC calibration */
+
+	if (HAL_OK != HAL_TIM_Base_Start_IT(&htim1)) {
 		Error_Handler();
 	}
-
-
-	if(HAL_ADCEx_Calibration_Start(&hadc1, ADC_CALIB_OFFSET, ADC_SINGLE_ENDED) != HAL_OK)
-  {
-	  Error_Handler();
-  }
-	HAL_Delay(10);
-
-  if(HAL_ADC_Start_DMA(&hadc1, (void*)&ADC1_VAL, ADC1_USED_CHANNEL) != HAL_OK)
+	if(HAL_OK != HAL_ADCEx_Calibration_Start(&hadc1, ADC_CALIB_OFFSET, ADC_SINGLE_ENDED))
 	{
-	  Error_Handler();
+		Error_Handler();
 	}
-	//test TS_CAL1 & CAL2
-	//uint16_t ts_cal1 = TEMPSENSOR_CAL1_ADDR;
-	//uint16_t ts_cal2 = TEMPSENSOR_CAL2_ADDR;
+	//HAL_Delay(10);
+	//Start_ADC_DMA();
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -173,6 +195,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
 	while (1) {
     /* USER CODE END WHILE */
 
@@ -199,17 +222,17 @@ void SystemClock_Config(void)
 
   /** Initializes the CPU, AHB and APB buses clocks
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_MSI;
-  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_MSI|RCC_OSCILLATORTYPE_MSIK;
   RCC_OscInitStruct.MSIState = RCC_MSI_ON;
   RCC_OscInitStruct.MSICalibrationValue = RCC_MSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.MSIClockRange = RCC_MSIRANGE_0;
+  RCC_OscInitStruct.MSIKClockRange = RCC_MSIKRANGE_4;
+  RCC_OscInitStruct.MSIKState = RCC_MSIK_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_MSI;
   RCC_OscInitStruct.PLL.PLLMBOOST = RCC_PLLMBOOST_DIV4;
   RCC_OscInitStruct.PLL.PLLM = 3;
-  RCC_OscInitStruct.PLL.PLLN = 10;
+  RCC_OscInitStruct.PLL.PLLN = 8;
   RCC_OscInitStruct.PLL.PLLP = 2;
   RCC_OscInitStruct.PLL.PLLQ = 2;
   RCC_OscInitStruct.PLL.PLLR = 1;
@@ -231,7 +254,7 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
   RCC_ClkInitStruct.APB3CLKDivider = RCC_HCLK_DIV1;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_3) != HAL_OK)
   {
     Error_Handler();
   }
@@ -293,23 +316,23 @@ static void MX_ADC1_Init(void)
   /** Common config
   */
   hadc1.Instance = ADC1;
-  hadc1.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV4;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV1;
   hadc1.Init.Resolution = ADC_RESOLUTION_14B;
   hadc1.Init.GainCompensation = 0;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc1.Init.ScanConvMode = ADC_SCAN_ENABLE;
+  hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;
   hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
   hadc1.Init.LowPowerAutoWait = DISABLE;
-  hadc1.Init.ContinuousConvMode = ENABLE;
-  hadc1.Init.NbrOfConversion = 2;
+  hadc1.Init.ContinuousConvMode = DISABLE;
+  hadc1.Init.NbrOfConversion = 1;
   hadc1.Init.DiscontinuousConvMode = DISABLE;
-  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
-  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
-  hadc1.Init.DMAContinuousRequests = ENABLE;
+  hadc1.Init.ExternalTrigConv = ADC_EXTERNALTRIG_T1_TRGO;
+  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_RISING;
+  hadc1.Init.DMAContinuousRequests = DISABLE;
   hadc1.Init.TriggerFrequencyMode = ADC_TRIGGER_FREQ_HIGH;
-  hadc1.Init.Overrun = ADC_OVR_DATA_OVERWRITTEN;
+  hadc1.Init.Overrun = ADC_OVR_DATA_PRESERVED;
   hadc1.Init.LeftBitShift = ADC_LEFTBITSHIFT_NONE;
-  hadc1.Init.ConversionDataManagement = ADC_CONVERSIONDATA_DMA_CIRCULAR;
+  hadc1.Init.ConversionDataManagement = ADC_CONVERSIONDATA_DMA_ONESHOT;
   hadc1.Init.OversamplingMode = DISABLE;
   if (HAL_ADC_Init(&hadc1) != HAL_OK)
   {
@@ -318,9 +341,9 @@ static void MX_ADC1_Init(void)
 
   /** Configure Regular Channel
   */
-  sConfig.Channel = ADC_CHANNEL_TEMPSENSOR;
+  sConfig.Channel = ADC_CHANNEL_1;
   sConfig.Rank = ADC_REGULAR_RANK_1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_814CYCLES;
+  sConfig.SamplingTime = ADC_SAMPLETIME_5CYCLE;
   sConfig.SingleDiff = ADC_SINGLE_ENDED;
   sConfig.OffsetNumber = ADC_OFFSET_NONE;
   sConfig.Offset = 0;
@@ -328,17 +351,8 @@ static void MX_ADC1_Init(void)
   {
     Error_Handler();
   }
-
-  /** Configure Regular Channel
-  */
-  sConfig.Channel = ADC_CHANNEL_1;
-  sConfig.Rank = ADC_REGULAR_RANK_2;
-  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
   /* USER CODE BEGIN ADC1_Init 2 */
-  ADC12_COMMON->CCR |= ADC_CCR_VSENSEEN;
+
   /* USER CODE END ADC1_Init 2 */
 
 }
@@ -460,7 +474,7 @@ static void MX_SPI1_Init(void)
   hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi1.Init.NSS = SPI_NSS_SOFT;
-  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8;
+  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_4;
   hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -493,6 +507,53 @@ static void MX_SPI1_Init(void)
 }
 
 /**
+  * @brief TIM1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM1_Init(void)
+{
+
+  /* USER CODE BEGIN TIM1_Init 0 */
+
+  /* USER CODE END TIM1_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM1_Init 1 */
+
+  /* USER CODE END TIM1_Init 1 */
+  htim1.Instance = TIM1;
+  htim1.Init.Prescaler = 128-1;
+  htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim1.Init.Period = 99;
+  htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim1.Init.RepetitionCounter = 0;
+  htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim1, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE;
+  sMasterConfig.MasterOutputTrigger2 = TIM_TRGO2_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM1_Init 2 */
+
+  /* USER CODE END TIM1_Init 2 */
+
+}
+
+/**
   * @brief TIM3 Initialization Function
   * @param None
   * @retval None
@@ -511,9 +572,9 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 1 */
   htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 120-1;
+  htim3.Init.Prescaler = 128-1;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 33333-1;
+  htim3.Init.Period = 40000-1;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
@@ -534,6 +595,56 @@ static void MX_TIM3_Init(void)
   /* USER CODE BEGIN TIM3_Init 2 */
 
   /* USER CODE END TIM3_Init 2 */
+
+}
+
+/**
+  * @brief TIM4 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM4_Init(void)
+{
+
+  /* USER CODE BEGIN TIM4_Init 0 */
+
+  /* USER CODE END TIM4_Init 0 */
+
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_OC_InitTypeDef sConfigOC = {0};
+
+  /* USER CODE BEGIN TIM4_Init 1 */
+
+  /* USER CODE END TIM4_Init 1 */
+  htim4.Instance = TIM4;
+  htim4.Init.Prescaler = 128-1;
+  htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim4.Init.Period = 9;
+  htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+  if (HAL_TIM_PWM_Init(&htim4) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim4, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC.Pulse = 500;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  if (HAL_TIM_PWM_ConfigChannel(&htim4, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  __HAL_TIM_DISABLE_OCxPRELOAD(&htim4, TIM_CHANNEL_1);
+  /* USER CODE BEGIN TIM4_Init 2 */
+
+  /* USER CODE END TIM4_Init 2 */
+  HAL_TIM_MspPostInit(&htim4);
 
 }
 
@@ -603,20 +714,65 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-static int count_1s = 0;
-int32_t temp_sense = 0;
-int32_t in1_diff_voltage = 0;
-
-void convert_temp(void){
-	temp_sense = __HAL_ADC_CALC_TEMPERATURE(hadc1.Instance, 3300UL, ADC1_VAL[0], LL_ADC_RESOLUTION_14B);
-	//in1_diff_voltage = __HAL_ADC_CALC_DIFF_DATA_TO_VOLTAGE(hadc1.Instance, 3300UL, ADC1_VAL[1], LL_ADC_RESOLUTION_14B);
-	in1_diff_voltage = __LL_ADC_CALC_DATA_TO_VOLTAGE(hadc1.Instance, 3300UL, ADC1_VAL[1], LL_ADC_RESOLUTION_14B);
-}
-
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
+uint16_t Adc_Convert_To_mV(uint16_t val)
 {
+	return (__LL_ADC_CALC_DATA_TO_VOLTAGE(hadc1.Instance, 3300UL, val, LL_ADC_RESOLUTION_14B));
+}
+
+void HAL_ADC_ErrorCallback(ADC_HandleTypeDef *hadc) {
+	/* Note: Disable ADC interruption that caused this error before entering in
+	 infinite loop below. */
+
+	/* In case of error due to overrun: Disable ADC group regular overrun interruption */
+	LL_ADC_DisableIT_OVR(ADC1);
+
+	/* Error reporting */
+	Error_Handler();
+}
+uint16_t *pAdc_val = NULL;
+void Convert_ADC_Buffer_To_Voltage()
+{
+//	for(int i = 0; i < ADC_MAX_BUFFER; i++)
+//		{
+//			if(osMessageQueueGetSpace(myQueueUIHandle) > 0)
+//			{
+//				osMessageQueuePut(myQueueUIHandle, (void*)&adc_val[i], 0, 0);
+//			}
+//		}
+	if(pAdc_val == NULL){
+		return;
+	}
+	else {
+		if(pAdc_val < (adc_val+ADC_MAX_BUFFER))
+		{
+			osMessageQueuePut(myQueueUIHandle, (void*)pAdc_val, 0, 0);
+			pAdc_val++;
+		}
+		else
+		{
+			ADC_Conv_Done = 0;
+			pAdc_val = NULL;
+		}
+	}
+}
+
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
+	ADC_Conv_Done = 2;
+	pAdc_val = adc_val;
+}
+
+int count_125hz = 0; //use to toggle LED_GREEN to make sure the freq of PWM output.
+void HAL_TIM_PWM_PulseFinishedCallback(TIM_HandleTypeDef *htim) {
+	if (htim->Instance == PWM_PB6_TIMER) {
+		//if (count_125hz++ == 1)
+		{
+			BSP_LED_Toggle(LED_GREEN);
+			//count_125hz = 0;
+		}
+	}
 
 }
+
 /**
  * @brief  Conversion DMA half-transfer callback in non-blocking mode
  * @param  hadc: ADC handle
@@ -644,10 +800,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 	else if (htim == &TGFX_T) {
 		touchgfxSignalVSync();
-		if (count_1s++ == 20) {
-			BSP_LED_Toggle(LED_GREEN);
-			count_1s = 0;
-		}
+		//if (count_1s++ == 20) {
+		//BSP_LED_Toggle(LED_GREEN);
+		//count_1s = 0;
+		//}
 	}
 
   /* USER CODE END Callback 1 */

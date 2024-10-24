@@ -33,19 +33,12 @@ extern "C" {
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "z_displ_ILI9XXX.h"
-
+#include "cmsis_os2.h"
 
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
-
-#define ADC1_USED_CHANNEL 2
-extern uint16_t ADC1_VAL[ADC1_USED_CHANNEL];
-
-extern int32_t temp_sense;
-extern int32_t in1_diff_voltage;
-
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -58,11 +51,20 @@ extern int32_t in1_diff_voltage;
 
 /* USER CODE END EM */
 
+void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
+
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-void convert_temp(void);
+#define ADC_MAX_BUFFER 200
+extern uint16_t adc_val[ADC_MAX_BUFFER];
+extern ADC_HandleTypeDef hadc1;
+void Start_ADC_DMA();
+uint16_t Adc_Convert_To_mV(uint16_t val);
+void Convert_ADC_Buffer_To_Voltage();
+extern uint8_t ADC_Conv_Done;
+
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
@@ -76,11 +78,11 @@ void convert_temp(void);
 #define DISPL_DC_GPIO_Port GPIOC
 
 /* USER CODE BEGIN Private defines */
+
+
 extern SPI_HandleTypeDef hspi1;
 extern DMA_HandleTypeDef handle_GPDMA1_Channel11;
-//extern uint8_t spiDmaTransferComplete;
 extern TIM_HandleTypeDef htim3;
-extern uint8_t update_ui;
 
 #define CS_L() HAL_GPIO_WritePin(DISPL_CS_GPIO_Port, DISPL_CS_Pin, GPIO_PIN_RESET)
 #define CS_H() HAL_GPIO_WritePin(DISPL_CS_GPIO_Port, DISPL_CS_Pin, GPIO_PIN_SET)
@@ -90,8 +92,6 @@ extern uint8_t update_ui;
 #define RST_H() HAL_GPIO_WritePin(DISPL_RST_GPIO_Port, DISPL_RST_Pin, GPIO_PIN_SET)
 #define LED_H() HAL_GPIO_WritePin(DISPL_LED_GPIO_Port, DISPL_LED_Pin, GPIO_PIN_SET)
 #define LED_L() HAL_GPIO_WritePin(DISPL_LED_GPIO_Port, DISPL_LED_Pin, GPIO_PIN_RESET)
-
-
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

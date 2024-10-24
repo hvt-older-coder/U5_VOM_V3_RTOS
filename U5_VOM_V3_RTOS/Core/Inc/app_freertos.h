@@ -65,8 +65,8 @@ typedef struct UiDataStruct {
 /* USER CODE END EM */
 extern osThreadId_t defaultTaskHandle;
 extern osThreadId_t TouchGFXTaskHandle;
-extern osThreadId_t mySendAdcTaskHandle;
-extern osMessageQueueId_t myUiDataQueueHandle;
+extern osThreadId_t myAdcTaskHandle;
+extern osMessageQueueId_t myQueueUIHandle;
 
 /* Exported function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -75,7 +75,7 @@ extern osMessageQueueId_t myUiDataQueueHandle;
 
 void StartDefaultTask(void *argument);
 extern void TouchGFX_Task(void *argument);
-void StartSendAdcTask(void *argument);
+void StartAdcTask(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 

@@ -1,3 +1,12 @@
-../Core/Src/main.c:151:6:SystemClock_Config	128	static,ignoring_inline_asm
-../Core/Src/main.c:79:5:main	56	static,ignoring_inline_asm
-../Core/Src/main.c:482:6:Error_Handler	0	static,ignoring_inline_asm
+../Core/Src/main.c:97:6:Start_Generate_PWM_OutputOnTim4Channel1_PB6	8	static,ignoring_inline_asm
+../Core/Src/main.c:104:6:Setup_LCD_For_TouchGFX	8	static,ignoring_inline_asm
+../Core/Src/main.c:112:6:Start_ADC_DMA	8	static,ignoring_inline_asm
+../Core/Src/main.c:211:6:SystemClock_Config	128	static,ignoring_inline_asm
+../Core/Src/main.c:123:5:main	72	static,ignoring_inline_asm
+../Core/Src/main.c:717:10:Adc_Convert_To_mV	0	static
+../Core/Src/main.c:722:6:HAL_ADC_ErrorCallback	0	static,ignoring_inline_asm
+../Core/Src/main.c:733:6:Convert_ADC_Buffer_To_Voltage	8	static
+../Core/Src/main.c:759:6:HAL_ADC_ConvCpltCallback	0	static
+../Core/Src/main.c:765:6:HAL_TIM_PWM_PulseFinishedCallback	0	static
+../Core/Src/main.c:791:6:HAL_TIM_PeriodElapsedCallback	0	static
+../Core/Src/main.c:816:6:Error_Handler	0	static,ignoring_inline_asm

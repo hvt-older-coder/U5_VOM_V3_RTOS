@@ -43,7 +43,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
-
+uint16_t ui_val = 0;
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
@@ -59,17 +59,17 @@ const osThreadAttr_t TouchGFXTask_attributes = {
   .priority = (osPriority_t) osPriorityNormal,
   .stack_size = 4096 * 4
 };
-/* Definitions for mySendAdcTask */
-osThreadId_t mySendAdcTaskHandle;
-const osThreadAttr_t mySendAdcTask_attributes = {
-  .name = "mySendAdcTask",
-  .priority = (osPriority_t) osPriorityAboveNormal,
+/* Definitions for myAdcTask */
+osThreadId_t myAdcTaskHandle;
+const osThreadAttr_t myAdcTask_attributes = {
+  .name = "myAdcTask",
+  .priority = (osPriority_t) osPriorityNormal,
   .stack_size = 128 * 4
 };
-/* Definitions for myUiDataQueue */
-osMessageQueueId_t myUiDataQueueHandle;
-const osMessageQueueAttr_t myUiDataQueue_attributes = {
-  .name = "myUiDataQueue"
+/* Definitions for myQueueUI */
+osMessageQueueId_t myQueueUIHandle;
+const osMessageQueueAttr_t myQueueUI_attributes = {
+  .name = "myQueueUI"
 };
 
 /* Private function prototypes -----------------------------------------------*/
@@ -98,8 +98,8 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN RTOS_TIMERS */
   /* start timers, add new ones, ... */
   /* USER CODE END RTOS_TIMERS */
-  /* creation of myUiDataQueue */
-  myUiDataQueueHandle = osMessageQueueNew (10, sizeof(UiData_t), &myUiDataQueue_attributes);
+  /* creation of myQueueUI */
+  myQueueUIHandle = osMessageQueueNew (200, sizeof(uint16_t), &myQueueUI_attributes);
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
@@ -110,8 +110,8 @@ void MX_FREERTOS_Init(void) {
   /* creation of TouchGFXTask */
   TouchGFXTaskHandle = osThreadNew(TouchGFX_Task, NULL, &TouchGFXTask_attributes);
 
-  /* creation of mySendAdcTask */
-  mySendAdcTaskHandle = osThreadNew(StartSendAdcTask, NULL, &mySendAdcTask_attributes);
+  /* creation of myAdcTask */
+  myAdcTaskHandle = osThreadNew(StartAdcTask, NULL, &myAdcTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -132,34 +132,41 @@ void MX_FREERTOS_Init(void) {
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN defaultTask */
+	//Start convert the first time.
   /* Infinite loop */
+
 	for(;;)
 	{
-
-		osDelay(10);
+		if(ADC_Conv_Done == 2)
+		{
+			Convert_ADC_Buffer_To_Voltage();
+		}
+		osDelay(60);
 	}
   /* USER CODE END defaultTask */
 }
 
-/* USER CODE BEGIN Header_StartSendAdcTask */
+/* USER CODE BEGIN Header_StartAdcTask */
 /**
-* @brief Function implementing the mySendAdcTask thread.
+* @brief Function implementing the myAdcTask thread.
 * @param argument: Not used
 * @retval None
 */
-
-/* USER CODE END Header_StartSendAdcTask */
-void StartSendAdcTask(void *argument)
+/* USER CODE END Header_StartAdcTask */
+void StartAdcTask(void *argument)
 {
-  /* USER CODE BEGIN mySendAdcTask */
-
+  /* USER CODE BEGIN myAdcTask */
   /* Infinite loop */
   for(;;)
   {
-	  convert_temp();
-	  osDelay(30);
+  	if(osMessageQueueGetSpace(myQueueUIHandle) == ADC_MAX_BUFFER && ADC_Conv_Done == 0)
+  	{
+  		ADC_Conv_Done = 1;
+  		Start_ADC_DMA();
+  	}
+  	osDelay(5000);
   }
-  /* USER CODE END mySendAdcTask */
+  /* USER CODE END myAdcTask */
 }
 
 /* Private application code --------------------------------------------------*/
