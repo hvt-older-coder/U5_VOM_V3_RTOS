@@ -19,18 +19,18 @@ void Screen1View::updateTemp(unsigned int val)
 {
 	//update ui.
 
-//	memset((void*)textAreaTempBuffer, 0, TEXTAREATEMP_SIZE*2);
-//
-//	Unicode::snprintf(textAreaTempBuffer,TEXTAREATEMP_SIZE, "%d", val);
-//
-//	textAreaTemp.invalidate();
-//
-//	dynamicGraph2.addDataPoint((float)val);
-//	dynamicGraph2.invalidate();
-	//dynamicGraph1.clear();
+	memset((void*)textAreaTempBuffer, 0, TEXTAREATEMP_SIZE*2);
+
+	Unicode::snprintf(textAreaTempBuffer,TEXTAREATEMP_SIZE, "%d", val);
+
+	textAreaTemp.invalidate();
+
+	dynamicGraph2.addDataPoint((float)val);
+	dynamicGraph2.invalidate();
+
 
 }
-int graph_point_count = 0;
+
 void Screen1View::updateVolt(unsigned int val)
 {
 	//update ui.
@@ -43,13 +43,6 @@ void Screen1View::updateVolt(unsigned int val)
 	dynamicGraph1.addDataPoint(gval);
 	dynamicGraph1.invalidate();
 
-	if(graph_point_count++ == 200)
-	{
-		graph_point_count = 0;
-		dynamicGraph1.clear();
-		//dynamicGraph1.setScale(1000, true);, to change the scale of the graphic, to match with the input waveform freq.
-		//For example, if the waveform freq = 10Khz, then the scale should be set for 1/(10Khz)/10, then 10 points will be display.
 
-	}
 }
 

@@ -19,9 +19,6 @@ Core/Src/z_displ_ILI9XXX.o: ../Core/Src/z_displ_ILI9XXX.c \
  ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_dma.h \
  ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_dma_ex.h \
  ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_cortex.h \
- ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_adc.h \
- ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_ll_adc.h \
- ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_adc_ex.h \
  ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_crc.h \
  ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_crc_ex.h \
  ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_flash.h \
@@ -38,9 +35,7 @@ Core/Src/z_displ_ILI9XXX.o: ../Core/Src/z_displ_ILI9XXX.c \
  ../Drivers/BSP/STM32U5xx_Nucleo/stm32u5xx_nucleo.h \
  ../Core/Inc/stm32u5xx_nucleo_conf.h \
  ../Drivers/BSP/STM32U5xx_Nucleo/stm32u5xx_nucleo_errno.h \
- ../Core/Inc/z_displ_ILI9XXX.h \
- ../Middlewares/Third_Party/CMSIS/RTOS2/Include/cmsis_os2.h \
- ../Core/Inc/z_displ_ILI9XXX.h
+ ../Core/Inc/z_displ_ILI9XXX.h ../Core/Inc/z_displ_ILI9XXX.h
 ../Core/Inc/main.h:
 ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal.h:
 ../Core/Inc/stm32u5xx_hal_conf.h:
@@ -62,9 +57,6 @@ Core/Src/z_displ_ILI9XXX.o: ../Core/Src/z_displ_ILI9XXX.c \
 ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_dma.h:
 ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_dma_ex.h:
 ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_cortex.h:
-../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_adc.h:
-../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_ll_adc.h:
-../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_adc_ex.h:
 ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_crc.h:
 ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_crc_ex.h:
 ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_flash.h:
@@ -82,5 +74,4 @@ Core/Src/z_displ_ILI9XXX.o: ../Core/Src/z_displ_ILI9XXX.c \
 ../Core/Inc/stm32u5xx_nucleo_conf.h:
 ../Drivers/BSP/STM32U5xx_Nucleo/stm32u5xx_nucleo_errno.h:
 ../Core/Inc/z_displ_ILI9XXX.h:
-../Middlewares/Third_Party/CMSIS/RTOS2/Include/cmsis_os2.h:
 ../Core/Inc/z_displ_ILI9XXX.h:

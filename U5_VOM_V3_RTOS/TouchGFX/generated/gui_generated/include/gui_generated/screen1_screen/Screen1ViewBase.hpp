@@ -9,10 +9,10 @@
 #include <gui/screen1_screen/Screen1Presenter.hpp>
 #include <touchgfx/widgets/Box.hpp>
 #include <touchgfx/widgets/TextAreaWithWildcard.hpp>
+#include <touchgfx/widgets/TextArea.hpp>
 #include <touchgfx/widgets/graph/GraphWrapAndOverwrite.hpp>
 #include <touchgfx/widgets/graph/GraphElements.hpp>
 #include <touchgfx/widgets/canvas/PainterRGB565.hpp>
-#include <touchgfx/widgets/TextArea.hpp>
 
 class Screen1ViewBase : public touchgfx::View<Screen1Presenter>
 {
@@ -34,14 +34,25 @@ protected:
     touchgfx::Box box2;
     touchgfx::TextAreaWithOneWildcard textAreaTemp;
     touchgfx::TextAreaWithOneWildcard textAreaVolt;
-    touchgfx::GraphWrapAndOverwrite<200> dynamicGraph1;
+    touchgfx::TextArea textArea3;
+    touchgfx::GraphWrapAndOverwrite<25> dynamicGraph1;
     touchgfx::GraphElementGridY dynamicGraph1MajorYAxisGrid;
     touchgfx::GraphElementLine dynamicGraph1Line1;
     touchgfx::PainterRGB565 dynamicGraph1Line1Painter;
+    touchgfx::GraphElementVerticalGapLine dynamicGraph1VerticalFrontline;
+    touchgfx::GraphWrapAndOverwrite<25> dynamicGraph2;
+    touchgfx::GraphElementGridY dynamicGraph2MajorYAxisGrid;
+    touchgfx::GraphElementLine dynamicGraph2Line1;
+    touchgfx::PainterRGB565 dynamicGraph2Line1Painter;
+    touchgfx::GraphElementVerticalGapLine dynamicGraph2VerticalFrontline;
     touchgfx::TextArea textArea4;
+    touchgfx::TextArea textArea4_2;
     touchgfx::TextArea textArea4_1;
     touchgfx::TextArea textArea4_1_1_1_2;
     touchgfx::TextArea textArea4_1_1_1_1;
+    touchgfx::TextArea textArea4_1_1;
+    touchgfx::TextArea textArea4_1_1_1_2_1;
+    touchgfx::TextArea textArea4_1_1_1_1_1;
 
     /*
      * Wildcard Buffers

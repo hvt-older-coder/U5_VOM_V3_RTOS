@@ -15,6 +15,7 @@ RM := rm -rf
 -include TouchGFX/gui/src/model/subdir.mk
 -include TouchGFX/gui/src/common/subdir.mk
 -include TouchGFX/generated/texts/src/subdir.mk
+-include TouchGFX/generated/images/src/__generated/subdir.mk
 -include TouchGFX/generated/images/src/subdir.mk
 -include TouchGFX/generated/gui_generated/src/screen1_screen/subdir.mk
 -include TouchGFX/generated/gui_generated/src/common/subdir.mk
@@ -38,7 +39,6 @@ RM := rm -rf
 -include Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/subdir.mk
 -include Middlewares/Third_Party/FreeRTOS/Source/subdir.mk
 -include Drivers/STM32U5xx_HAL_Driver/Src/subdir.mk
--include Drivers/BSP/STM32U5xx_Nucleo/subdir.mk
 -include Core/Startup/subdir.mk
 -include Core/Src/subdir.mk
 -include objects.mk
@@ -113,8 +113,8 @@ all: main-build
 main-build: U5_VOM_V3_RTOS.elf secondary-outputs
 
 # Tool invocations
-U5_VOM_V3_RTOS.elf U5_VOM_V3_RTOS.map: $(OBJS) $(USER_OBJS) C:\Users\Admin\Documents\GitHub\vom_v1\U5_VOM_V3_RTOS\STM32U545RETXQ_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-g++ -o "U5_VOM_V3_RTOS.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m33 -T"C:\Users\Admin\Documents\GitHub\vom_v1\U5_VOM_V3_RTOS\STM32U545RETXQ_FLASH.ld" -Wl,-Map="U5_VOM_V3_RTOS.map" -Wl,--gc-sections -static -L"C:\Users\Admin\Documents\GitHub\vom_v1\U5_VOM_V3_RTOS\Middlewares\ST\touchgfx\lib\core\cortex_m33\gcc" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+U5_VOM_V3_RTOS.elf U5_VOM_V3_RTOS.map: $(OBJS) $(USER_OBJS) D:\U5\workspace\U5_VOM_V3_RTOS-main\U5_VOM_V3_RTOS\STM32U545RETXQ_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-g++ -o "U5_VOM_V3_RTOS.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m33 -T"D:\U5\workspace\U5_VOM_V3_RTOS-main\U5_VOM_V3_RTOS\STM32U545RETXQ_FLASH.ld" -Wl,-Map="U5_VOM_V3_RTOS.map" -Wl,--gc-sections -static -L"D:\U5\workspace\U5_VOM_V3_RTOS-main\U5_VOM_V3_RTOS\Middlewares\ST\touchgfx\lib\core\cortex_m33\gcc" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

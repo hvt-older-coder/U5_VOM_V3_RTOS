@@ -9,7 +9,12 @@
             "Type": "Box",
             "Name": "box1",
             "Width": 240,
-            "Height": 320
+            "Height": 320,
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            }
           },
           {
             "Type": "Box",
@@ -55,19 +60,38 @@
             }
           },
           {
+            "Type": "TextArea",
+            "Name": "textArea3",
+            "X": 31,
+            "Width": 178,
+            "Height": 20,
+            "TextId": "__SingleUse_2HIB",
+            "TextRotation": "0",
+            "AutoSize": true
+          },
+          {
             "Type": "DynamicGraph",
             "Name": "dynamicGraph1",
-            "X": 18,
+            "X": 31,
             "Y": 119,
-            "Width": 216,
-            "Height": 100,
-            "DataSeed": 418578496,
-            "NumberOfValues": 200,
+            "Width": 203,
+            "Height": 76,
+            "DataSeed": -1567757659,
+            "NumberOfValues": 25,
             "MaxY": 4.0,
             "Precision": "0.1",
-            "LastIndex": 199,
+            "LastIndex": 24,
+            "MapDataPointIndexToCustomValue": true,
             "XAxisScale": 1.0,
+            "InsertRandomValues": true,
             "GraphType": "GraphWrapOverwrite",
+            "VerticalFrontline": {
+              "Type": "GraphVerticalFrontline",
+              "Color": {
+                "Red": 255
+              },
+              "GapLineWidth": 1
+            },
             "GraphDrawers": [
               {
                 "Type": "LineDrawer",
@@ -82,12 +106,53 @@
             ],
             "YAxisGrid": {
               "Type": "GraphGrid",
-              "Color": {
-                "Red": 255,
-                "Green": 255,
-                "Blue": 255
-              },
               "Interval": 2.0,
+              "LineWidth": 1
+            }
+          },
+          {
+            "Type": "DynamicGraph",
+            "Name": "dynamicGraph2",
+            "X": 31,
+            "Y": 233,
+            "Width": 203,
+            "Height": 76,
+            "DataSeed": -1567757659,
+            "NumberOfValues": 25,
+            "MaxY": 100.0,
+            "Precision": "0.1",
+            "LastIndex": 24,
+            "MapDataPointIndexToCustomValue": true,
+            "XAxisScale": 1.0,
+            "InsertRandomValues": true,
+            "GraphType": "GraphWrapOverwrite",
+            "VerticalFrontline": {
+              "Type": "GraphVerticalFrontline",
+              "Color": {
+                "Red": 255
+              },
+              "GapLineWidth": 1
+            },
+            "GraphDrawers": [
+              {
+                "Type": "LineDrawer",
+                "LineWidth": 2,
+                "FileNameImage": "",
+                "Color": {
+                  "Red": 147,
+                  "Green": 31,
+                  "Blue": 173
+                }
+              }
+            ],
+            "YAxisGrid": {
+              "Type": "GraphGrid",
+              "Color": {
+                "Red": 3,
+                "Green": 3,
+                "Blue": 3
+              },
+              "Interval": 25.0,
               "LineWidth": 1
             }
           },
@@ -104,50 +169,79 @@
           },
           {
             "Type": "TextArea",
+            "Name": "textArea4_2",
+            "X": 6,
+            "Y": 211,
+            "Width": 61,
+            "Height": 12,
+            "TextId": "__SingleUse_5K6I",
+            "TextRotation": "0",
+            "AutoSize": true
+          },
+          {
+            "Type": "TextArea",
             "Name": "textArea4_1",
             "X": 6,
-            "Y": 163,
+            "Y": 152,
             "Width": 6,
             "Height": 12,
             "TextId": "__SingleUse_F7VS",
             "TextRotation": "0",
-            "Color": {
-              "Red": 255,
-              "Green": 255,
-              "Blue": 255
-            },
             "AutoSize": true
           },
           {
             "Type": "TextArea",
             "Name": "textArea4_1_1_1_2",
             "X": 6,
-            "Y": 111,
+            "Y": 114,
             "Width": 6,
             "Height": 12,
             "TextId": "__SingleUse_BPQY",
             "TextRotation": "0",
-            "Color": {
-              "Red": 255,
-              "Green": 255,
-              "Blue": 255
-            },
             "AutoSize": true
           },
           {
             "Type": "TextArea",
             "Name": "textArea4_1_1_1_1",
             "X": 6,
-            "Y": 213,
+            "Y": 189,
             "Width": 6,
             "Height": 12,
             "TextId": "__SingleUse_88JH",
             "TextRotation": "0",
-            "Color": {
-              "Red": 255,
-              "Green": 255,
-              "Blue": 255
-            },
+            "AutoSize": true
+          },
+          {
+            "Type": "TextArea",
+            "Name": "textArea4_1_1",
+            "X": 6,
+            "Y": 266,
+            "Width": 12,
+            "Height": 12,
+            "TextId": "__SingleUse_SCUA",
+            "TextRotation": "0",
+            "AutoSize": true
+          },
+          {
+            "Type": "TextArea",
+            "Name": "textArea4_1_1_1_2_1",
+            "X": 6,
+            "Y": 228,
+            "Width": 18,
+            "Height": 12,
+            "TextId": "__SingleUse_1Y1G",
+            "TextRotation": "0",
+            "AutoSize": true
+          },
+          {
+            "Type": "TextArea",
+            "Name": "textArea4_1_1_1_1_1",
+            "X": 6,
+            "Y": 303,
+            "Width": 6,
+            "Height": 12,
+            "TextId": "__SingleUse_IFBT",
+            "TextRotation": "0",
             "AutoSize": true
           }
         ],

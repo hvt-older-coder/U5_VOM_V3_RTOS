@@ -23,7 +23,6 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "linked_list.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -33,8 +32,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define PWM_PB6_TIMER TIM4
-int ADC_Busy = 0;
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -43,18 +41,16 @@ int ADC_Busy = 0;
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-
 ADC_HandleTypeDef hadc1;
-DMA_HandleTypeDef handle_GPDMA1_Channel10;
 
 CRC_HandleTypeDef hcrc;
+
+I2C_HandleTypeDef hi2c1;
 
 SPI_HandleTypeDef hspi1;
 DMA_HandleTypeDef handle_GPDMA1_Channel11;
 
-TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim3;
-TIM_HandleTypeDef htim4;
 
 /* USER CODE BEGIN PV */
 /* USER CODE END PD */
@@ -67,9 +63,6 @@ TIM_HandleTypeDef htim4;
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
 
-uint16_t adc_val[ADC_MAX_BUFFER];
-uint8_t ADC_Conv_Done = 0;
-extern osMessageQueueId_t myQueueUIHandle;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -82,9 +75,8 @@ static void MX_SPI1_Init(void);
 static void MX_TIM3_Init(void);
 static void MX_CRC_Init(void);
 static void MX_ICACHE_Init(void);
-static void MX_TIM4_Init(void);
+static void MX_I2C1_Init(void);
 static void MX_ADC1_Init(void);
-static void MX_TIM1_Init(void);
 static void MX_NVIC_Init(void);
 /* USER CODE BEGIN PFP */
 
@@ -92,25 +84,22 @@ static void MX_NVIC_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-/* Variable containing ADC conversions data */
-
-void Start_Generate_PWM_OutputOnTim4Channel1_PB6() {
-	//Timer4 use to generate PWM output.
-	if (HAL_TIM_PWM_Start_IT(&htim4, TIM_CHANNEL_1) != HAL_OK) {
-		Error_Handler();
-	}
-}
-
-void Setup_LCD_For_TouchGFX() {
-	Displ_Init(Displ_Orientat_0); // initialize the display and set the initial display orientation (here is orientaton: 0°) - THIS FUNCTION MUST PRECEED ANY OTHER DISPLAY FUNCTION CALL.
-	Displ_BackLight('1');  	// initialize backlight and turn it on at init level
+void Setup_LCD_TouchGFX()
+{
+	//Init the LCD & turn on the display.
+	// initialize the display and set the initial display orientation (here is orientaton: 0°) - THIS FUNCTION MUST PRECEED ANY OTHER DISPLAY FUNCTION CALL.
+	Displ_Init(Displ_Orientat_0);
+	// initialize backlight and turn it on at init level
+	Displ_BackLight('1');
+	//Call the first sync.
 	touchgfxSignalVSync();
+
+	//Start Sync timer for TouchGFX.
+	//This timer is 25Hz -> FPS = 25. This is depending on the max speed of SPI LCD.
+	//SPI max speed = 32Mhz
+	//Time to stransfer 1 frame = 240x320x16(bit)/32Mhz = ~= 0.0384s. <=> Refresh rate = 1/0.0384 = ~ 26Hz.
+	//So take the max FPS 25, is the best choice for this case.
 	if (HAL_TIM_Base_Start_IT(&TGFX_T) != HAL_OK) {
-		Error_Handler();
-	}
-}
-void Start_ADC_DMA() {
-	if (HAL_OK != HAL_ADC_Start_DMA(&hadc1, (void*) adc_val, ADC_MAX_BUFFER)) {
 		Error_Handler();
 	}
 }
@@ -153,9 +142,8 @@ int main(void)
   MX_TIM3_Init();
   MX_CRC_Init();
   MX_ICACHE_Init();
-  MX_TIM4_Init();
+  MX_I2C1_Init();
   MX_ADC1_Init();
-  MX_TIM1_Init();
   MX_TouchGFX_Init();
   /* Call PreOsInit function */
   MX_TouchGFX_PreOSInit();
@@ -163,20 +151,7 @@ int main(void)
   /* Initialize interrupts */
   MX_NVIC_Init();
   /* USER CODE BEGIN 2 */
-	Setup_LCD_For_TouchGFX();
-	//Gen PWM_PB0
-	Start_Generate_PWM_OutputOnTim4Channel1_PB6();
-	/* Perform ADC calibration */
 
-	if (HAL_OK != HAL_TIM_Base_Start_IT(&htim1)) {
-		Error_Handler();
-	}
-	if(HAL_OK != HAL_ADCEx_Calibration_Start(&hadc1, ADC_CALIB_OFFSET, ADC_SINGLE_ENDED))
-	{
-		Error_Handler();
-	}
-	//HAL_Delay(10);
-	//Start_ADC_DMA();
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -185,9 +160,6 @@ int main(void)
   /* Call init function for freertos objects (in cmsis_os2.c) */
   MX_FREERTOS_Init();
 
-  /* Initialize led */
-  BSP_LED_Init(LED_GREEN);
-
   /* Start scheduler */
   osKernelStart();
 
@@ -195,7 +167,6 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-
 	while (1) {
     /* USER CODE END WHILE */
 
@@ -222,12 +193,12 @@ void SystemClock_Config(void)
 
   /** Initializes the CPU, AHB and APB buses clocks
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_MSI|RCC_OSCILLATORTYPE_MSIK;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_MSI;
+  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.MSIState = RCC_MSI_ON;
   RCC_OscInitStruct.MSICalibrationValue = RCC_MSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.MSIClockRange = RCC_MSIRANGE_0;
-  RCC_OscInitStruct.MSIKClockRange = RCC_MSIKRANGE_4;
-  RCC_OscInitStruct.MSIKState = RCC_MSIK_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_MSI;
   RCC_OscInitStruct.PLL.PLLMBOOST = RCC_PLLMBOOST_DIV4;
@@ -284,9 +255,6 @@ static void SystemPower_Config(void)
   */
 static void MX_NVIC_Init(void)
 {
-  /* SPI1_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(SPI1_IRQn, 5, 0);
-  HAL_NVIC_EnableIRQ(SPI1_IRQn);
   /* GPDMA1_Channel11_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(GPDMA1_Channel11_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(GPDMA1_Channel11_IRQn);
@@ -326,13 +294,13 @@ static void MX_ADC1_Init(void)
   hadc1.Init.ContinuousConvMode = DISABLE;
   hadc1.Init.NbrOfConversion = 1;
   hadc1.Init.DiscontinuousConvMode = DISABLE;
-  hadc1.Init.ExternalTrigConv = ADC_EXTERNALTRIG_T1_TRGO;
-  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_RISING;
+  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
   hadc1.Init.DMAContinuousRequests = DISABLE;
   hadc1.Init.TriggerFrequencyMode = ADC_TRIGGER_FREQ_HIGH;
   hadc1.Init.Overrun = ADC_OVR_DATA_PRESERVED;
   hadc1.Init.LeftBitShift = ADC_LEFTBITSHIFT_NONE;
-  hadc1.Init.ConversionDataManagement = ADC_CONVERSIONDATA_DMA_ONESHOT;
+  hadc1.Init.ConversionDataManagement = ADC_CONVERSIONDATA_DR;
   hadc1.Init.OversamplingMode = DISABLE;
   if (HAL_ADC_Init(&hadc1) != HAL_OK)
   {
@@ -341,7 +309,7 @@ static void MX_ADC1_Init(void)
 
   /** Configure Regular Channel
   */
-  sConfig.Channel = ADC_CHANNEL_1;
+  sConfig.Channel = ADC_CHANNEL_15;
   sConfig.Rank = ADC_REGULAR_RANK_1;
   sConfig.SamplingTime = ADC_SAMPLETIME_5CYCLE;
   sConfig.SingleDiff = ADC_SINGLE_ENDED;
@@ -403,10 +371,6 @@ static void MX_GPDMA1_Init(void)
   /* Peripheral clock enable */
   __HAL_RCC_GPDMA1_CLK_ENABLE();
 
-  /* GPDMA1 interrupt Init */
-    HAL_NVIC_SetPriority(GPDMA1_Channel10_IRQn, 5, 0);
-    HAL_NVIC_EnableIRQ(GPDMA1_Channel10_IRQn);
-
   /* USER CODE BEGIN GPDMA1_Init 1 */
 
   /* USER CODE END GPDMA1_Init 1 */
@@ -414,6 +378,54 @@ static void MX_GPDMA1_Init(void)
 	//handle_GPDMA1_Channel11.Init.SrcDataWidth = DMA_SRC_DATAWIDTH_BYTE;
 	//handle_GPDMA1_Channel11.Init.DestDataWidth  = DMA_SRC_DATAWIDTH_BYTE;
   /* USER CODE END GPDMA1_Init 2 */
+
+}
+
+/**
+  * @brief I2C1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_I2C1_Init(void)
+{
+
+  /* USER CODE BEGIN I2C1_Init 0 */
+
+  /* USER CODE END I2C1_Init 0 */
+
+  /* USER CODE BEGIN I2C1_Init 1 */
+
+  /* USER CODE END I2C1_Init 1 */
+  hi2c1.Instance = I2C1;
+  hi2c1.Init.Timing = 0x20A0C4DF;
+  hi2c1.Init.OwnAddress1 = 0;
+  hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+  hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+  hi2c1.Init.OwnAddress2 = 0;
+  hi2c1.Init.OwnAddress2Masks = I2C_OA2_NOMASK;
+  hi2c1.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+  hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+  if (HAL_I2C_Init(&hi2c1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure Analogue filter
+  */
+  if (HAL_I2CEx_ConfigAnalogFilter(&hi2c1, I2C_ANALOGFILTER_ENABLE) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure Digital filter
+  */
+  if (HAL_I2CEx_ConfigDigitalFilter(&hi2c1, 0) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN I2C1_Init 2 */
+
+  /* USER CODE END I2C1_Init 2 */
 
 }
 
@@ -507,53 +519,6 @@ static void MX_SPI1_Init(void)
 }
 
 /**
-  * @brief TIM1 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_TIM1_Init(void)
-{
-
-  /* USER CODE BEGIN TIM1_Init 0 */
-
-  /* USER CODE END TIM1_Init 0 */
-
-  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
-  TIM_MasterConfigTypeDef sMasterConfig = {0};
-
-  /* USER CODE BEGIN TIM1_Init 1 */
-
-  /* USER CODE END TIM1_Init 1 */
-  htim1.Instance = TIM1;
-  htim1.Init.Prescaler = 128-1;
-  htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim1.Init.Period = 99;
-  htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim1.Init.RepetitionCounter = 0;
-  htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  if (HAL_TIM_Base_Init(&htim1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-  if (HAL_TIM_ConfigClockSource(&htim1, &sClockSourceConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE;
-  sMasterConfig.MasterOutputTrigger2 = TIM_TRGO2_RESET;
-  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-  if (HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN TIM1_Init 2 */
-
-  /* USER CODE END TIM1_Init 2 */
-
-}
-
-/**
   * @brief TIM3 Initialization Function
   * @param None
   * @retval None
@@ -572,9 +537,9 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 1 */
   htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 128-1;
+  htim3.Init.Prescaler = 120-1;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 40000-1;
+  htim3.Init.Period = 33333-1;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
@@ -599,56 +564,6 @@ static void MX_TIM3_Init(void)
 }
 
 /**
-  * @brief TIM4 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_TIM4_Init(void)
-{
-
-  /* USER CODE BEGIN TIM4_Init 0 */
-
-  /* USER CODE END TIM4_Init 0 */
-
-  TIM_MasterConfigTypeDef sMasterConfig = {0};
-  TIM_OC_InitTypeDef sConfigOC = {0};
-
-  /* USER CODE BEGIN TIM4_Init 1 */
-
-  /* USER CODE END TIM4_Init 1 */
-  htim4.Instance = TIM4;
-  htim4.Init.Prescaler = 128-1;
-  htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim4.Init.Period = 9;
-  htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
-  if (HAL_TIM_PWM_Init(&htim4) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-  if (HAL_TIMEx_MasterConfigSynchronization(&htim4, &sMasterConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 500;
-  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-  if (HAL_TIM_PWM_ConfigChannel(&htim4, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  __HAL_TIM_DISABLE_OCxPRELOAD(&htim4, TIM_CHANNEL_1);
-  /* USER CODE BEGIN TIM4_Init 2 */
-
-  /* USER CODE END TIM4_Init 2 */
-  HAL_TIM_MspPostInit(&htim4);
-
-}
-
-/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -660,32 +575,21 @@ static void MX_GPIO_Init(void)
 /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, DISPL_LED_Pin|DISPL_CS_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, DISPL_LED_Pin|DISPL_RST_Pin|LED_GREEN_Pin|DISPL_DC_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(DISPL_RST_GPIO_Port, DISPL_RST_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(DISPL_CS_GPIO_Port, DISPL_CS_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(DISPL_DC_GPIO_Port, DISPL_DC_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin : DISPL_LED_Pin */
-  GPIO_InitStruct.Pin = DISPL_LED_Pin;
+  /*Configure GPIO pins : DISPL_LED_Pin LED_GREEN_Pin */
+  GPIO_InitStruct.Pin = DISPL_LED_Pin|LED_GREEN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(DISPL_LED_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : DISPL_CS_Pin */
-  GPIO_InitStruct.Pin = DISPL_CS_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-  HAL_GPIO_Init(DISPL_CS_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pin : DISPL_RST_Pin */
   GPIO_InitStruct.Pin = DISPL_RST_Pin;
@@ -694,90 +598,30 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
   HAL_GPIO_Init(DISPL_RST_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PB10 */
-  GPIO_InitStruct.Pin = GPIO_PIN_10;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  GPIO_InitStruct.Alternate = GPIO_AF1_TIM2;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
   /*Configure GPIO pin : DISPL_DC_Pin */
   GPIO_InitStruct.Pin = DISPL_DC_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
   HAL_GPIO_Init(DISPL_DC_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : DISPL_CS_Pin */
+  GPIO_InitStruct.Pin = DISPL_CS_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  HAL_GPIO_Init(DISPL_CS_GPIO_Port, &GPIO_InitStruct);
+
+  /**/
+  __HAL_SYSCFG_FASTMODEPLUS_ENABLE(SYSCFG_FASTMODEPLUS_PB8);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */
-uint16_t Adc_Convert_To_mV(uint16_t val)
-{
-	return (__LL_ADC_CALC_DATA_TO_VOLTAGE(hadc1.Instance, 3300UL, val, LL_ADC_RESOLUTION_14B));
-}
-
-void HAL_ADC_ErrorCallback(ADC_HandleTypeDef *hadc) {
-	/* Note: Disable ADC interruption that caused this error before entering in
-	 infinite loop below. */
-
-	/* In case of error due to overrun: Disable ADC group regular overrun interruption */
-	LL_ADC_DisableIT_OVR(ADC1);
-
-	/* Error reporting */
-	Error_Handler();
-}
-uint16_t *pAdc_val = NULL;
-void Convert_ADC_Buffer_To_Voltage()
-{
-//	for(int i = 0; i < ADC_MAX_BUFFER; i++)
-//		{
-//			if(osMessageQueueGetSpace(myQueueUIHandle) > 0)
-//			{
-//				osMessageQueuePut(myQueueUIHandle, (void*)&adc_val[i], 0, 0);
-//			}
-//		}
-	if(pAdc_val == NULL){
-		return;
-	}
-	else {
-		if(pAdc_val < (adc_val+ADC_MAX_BUFFER))
-		{
-			osMessageQueuePut(myQueueUIHandle, (void*)pAdc_val, 0, 0);
-			pAdc_val++;
-		}
-		else
-		{
-			ADC_Conv_Done = 0;
-			pAdc_val = NULL;
-		}
-	}
-}
-
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
-	ADC_Conv_Done = 2;
-	pAdc_val = adc_val;
-}
-
-int count_125hz = 0; //use to toggle LED_GREEN to make sure the freq of PWM output.
-void HAL_TIM_PWM_PulseFinishedCallback(TIM_HandleTypeDef *htim) {
-	if (htim->Instance == PWM_PB6_TIMER) {
-		//if (count_125hz++ == 1)
-		{
-			BSP_LED_Toggle(LED_GREEN);
-			//count_125hz = 0;
-		}
-	}
-
-}
-
-/**
- * @brief  Conversion DMA half-transfer callback in non-blocking mode
- * @param  hadc: ADC handle
- * @retval None
- */
+#define TOUCH_GFX_FPS 25
+int count_fps_1s = 0;
 /* USER CODE END 4 */
 
 /**
@@ -800,10 +644,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 	else if (htim == &TGFX_T) {
 		touchgfxSignalVSync();
-		//if (count_1s++ == 20) {
-		//BSP_LED_Toggle(LED_GREEN);
-		//count_1s = 0;
-		//}
+		//
+		if(count_fps_1s++ == TOUCH_GFX_FPS)
+		{
+//			//BSP_LED_Toggle(LED_GREEN);
+			HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
+			count_fps_1s = 0;
+		}
 	}
 
   /* USER CODE END Callback 1 */
