@@ -23,7 +23,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "main.h"
-
+#include "modules.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -43,7 +43,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
-
+#ifdef KEEP_DEFAULT_TASK_FROM_STM
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
@@ -52,29 +52,10 @@ const osThreadAttr_t defaultTask_attributes = {
   .priority = (osPriority_t) osPriorityNormal,
   .stack_size = 128 * 4
 };
-/* Definitions for TouchGFXTask */
-osThreadId_t TouchGFXTaskHandle;
-const osThreadAttr_t TouchGFXTask_attributes = {
-  .name = "TouchGFXTask",
-  .priority = (osPriority_t) osPriorityNormal,
-  .stack_size = 4096 * 4
-};
-/* Definitions for mySendAdcTask */
-osThreadId_t mySendAdcTaskHandle;
-const osThreadAttr_t mySendAdcTask_attributes = {
-  .name = "mySendAdcTask",
-  .priority = (osPriority_t) osPriorityAboveNormal,
-  .stack_size = 128 * 4
-};
-/* Definitions for myUiDataQueue */
-osMessageQueueId_t myUiDataQueueHandle;
-const osMessageQueueAttr_t myUiDataQueue_attributes = {
-  .name = "myUiDataQueue"
-};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
-
+#endif
 /* USER CODE END FunctionPrototypes */
 
 /**
@@ -98,23 +79,20 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN RTOS_TIMERS */
   /* start timers, add new ones, ... */
   /* USER CODE END RTOS_TIMERS */
-  /* creation of myUiDataQueue */
-  myUiDataQueueHandle = osMessageQueueNew (10, sizeof(UiData_t), &myUiDataQueue_attributes);
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
+#ifdef KEEP_DEFAULT_TASK_FROM_STM
   /* USER CODE END RTOS_QUEUES */
   /* creation of defaultTask */
-  defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
-
-  /* creation of TouchGFXTask */
-  TouchGFXTaskHandle = osThreadNew(TouchGFX_Task, NULL, &TouchGFXTask_attributes);
-
-  /* creation of mySendAdcTask */
-  mySendAdcTaskHandle = osThreadNew(StartSendAdcTask, NULL, &mySendAdcTask_attributes);
+  defaultTaskHandle = osThreadNew(DefaultTaskEntry, NULL, &defaultTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
+#endif
   /* add threads, ... */
+  //Remove default task.
+
+  init_tasks();
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */
@@ -122,48 +100,27 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE END RTOS_EVENTS */
 
 }
-/* USER CODE BEGIN Header_StartDefaultTask */
+/* USER CODE BEGIN Header_DefaultTaskEntry */
 /**
 * @brief Function implementing the defaultTask thread.
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_StartDefaultTask */
-void StartDefaultTask(void *argument)
+#ifdef KEEP_DEFAULT_TASK_FROM_STM
+/* USER CODE END Header_DefaultTaskEntry */
+__weak void DefaultTaskEntry(void *argument)
 {
   /* USER CODE BEGIN defaultTask */
-	Setup_LCD_TouchGFX();
-  /* Infinite loop */
-	for(;;)
-	{
-
-		osDelay(10);
-	}
-  /* USER CODE END defaultTask */
-}
-
-/* USER CODE BEGIN Header_StartSendAdcTask */
-/**
-* @brief Function implementing the mySendAdcTask thread.
-* @param argument: Not used
-* @retval None
-*/
-
-/* USER CODE END Header_StartSendAdcTask */
-void StartSendAdcTask(void *argument)
-{
-  /* USER CODE BEGIN mySendAdcTask */
-
   /* Infinite loop */
   for(;;)
   {
-	  osDelay(30);
+    osDelay(1);
   }
-  /* USER CODE END mySendAdcTask */
+  /* USER CODE END defaultTask */
 }
 
 /* Private application code --------------------------------------------------*/
 /* USER CODE BEGIN Application */
-
+#endif
 /* USER CODE END Application */
 

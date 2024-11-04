@@ -42,6 +42,9 @@
 
 /* Private variables ---------------------------------------------------------*/
 ADC_HandleTypeDef hadc1;
+DMA_NodeTypeDef Node_GPDMA1_Channel10;
+DMA_QListTypeDef List_GPDMA1_Channel10;
+DMA_HandleTypeDef handle_GPDMA1_Channel10;
 
 CRC_HandleTypeDef hcrc;
 
@@ -87,7 +90,8 @@ static void MX_NVIC_Init(void);
 void Setup_LCD_TouchGFX()
 {
 	//Init the LCD & turn on the display.
-	// initialize the display and set the initial display orientation (here is orientaton: 0°) - THIS FUNCTION MUST PRECEED ANY OTHER DISPLAY FUNCTION CALL.
+	// initialize the display and set the initial display orientation (here is orientaton: 0°)
+	// - THIS FUNCTION MUST PRECEED ANY OTHER DISPLAY FUNCTION CALL.
 	Displ_Init(Displ_Orientat_0);
 	// initialize backlight and turn it on at init level
 	Displ_BackLight('1');
@@ -284,23 +288,23 @@ static void MX_ADC1_Init(void)
   /** Common config
   */
   hadc1.Instance = ADC1;
-  hadc1.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV1;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV256;
   hadc1.Init.Resolution = ADC_RESOLUTION_14B;
   hadc1.Init.GainCompensation = 0;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;
+  hadc1.Init.ScanConvMode = ADC_SCAN_ENABLE;
   hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
   hadc1.Init.LowPowerAutoWait = DISABLE;
-  hadc1.Init.ContinuousConvMode = DISABLE;
-  hadc1.Init.NbrOfConversion = 1;
+  hadc1.Init.ContinuousConvMode = ENABLE;
+  hadc1.Init.NbrOfConversion = 2;
   hadc1.Init.DiscontinuousConvMode = DISABLE;
   hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
   hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
-  hadc1.Init.DMAContinuousRequests = DISABLE;
+  hadc1.Init.DMAContinuousRequests = ENABLE;
   hadc1.Init.TriggerFrequencyMode = ADC_TRIGGER_FREQ_HIGH;
   hadc1.Init.Overrun = ADC_OVR_DATA_PRESERVED;
   hadc1.Init.LeftBitShift = ADC_LEFTBITSHIFT_NONE;
-  hadc1.Init.ConversionDataManagement = ADC_CONVERSIONDATA_DR;
+  hadc1.Init.ConversionDataManagement = ADC_CONVERSIONDATA_DMA_CIRCULAR;
   hadc1.Init.OversamplingMode = DISABLE;
   if (HAL_ADC_Init(&hadc1) != HAL_OK)
   {
@@ -311,10 +315,19 @@ static void MX_ADC1_Init(void)
   */
   sConfig.Channel = ADC_CHANNEL_15;
   sConfig.Rank = ADC_REGULAR_RANK_1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_5CYCLE;
+  sConfig.SamplingTime = ADC_SAMPLETIME_20CYCLES;
   sConfig.SingleDiff = ADC_SINGLE_ENDED;
   sConfig.OffsetNumber = ADC_OFFSET_NONE;
   sConfig.Offset = 0;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure Regular Channel
+  */
+  sConfig.Channel = ADC_CHANNEL_16;
+  sConfig.Rank = ADC_REGULAR_RANK_2;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
     Error_Handler();
@@ -370,6 +383,10 @@ static void MX_GPDMA1_Init(void)
 
   /* Peripheral clock enable */
   __HAL_RCC_GPDMA1_CLK_ENABLE();
+
+  /* GPDMA1 interrupt Init */
+    HAL_NVIC_SetPriority(GPDMA1_Channel10_IRQn, 5, 0);
+    HAL_NVIC_EnableIRQ(GPDMA1_Channel10_IRQn);
 
   /* USER CODE BEGIN GPDMA1_Init 1 */
 
@@ -635,7 +652,7 @@ int count_fps_1s = 0;
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   /* USER CODE BEGIN Callback 0 */
-
+	//Due to the Rtos timer, the callback is fixed here, we don't want to touch it, and we keep all the timer ISR code in this file & func.
   /* USER CODE END Callback 0 */
   if (htim->Instance == TIM15) {
     HAL_IncTick();
@@ -643,11 +660,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   /* USER CODE BEGIN Callback 1 */
 
 	else if (htim == &TGFX_T) {
+		//TouchGFX Sync timer.
+		//Periodicly call by 25Hz, FPS = 25.
 		touchgfxSignalVSync();
-		//
+		//Toggle the LED, to make sure it's correct time.
 		if(count_fps_1s++ == TOUCH_GFX_FPS)
 		{
-//			//BSP_LED_Toggle(LED_GREEN);
 			HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
 			count_fps_1s = 0;
 		}

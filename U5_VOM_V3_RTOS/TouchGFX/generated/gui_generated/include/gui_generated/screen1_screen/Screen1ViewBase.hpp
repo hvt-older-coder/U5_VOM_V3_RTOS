@@ -35,24 +35,15 @@ protected:
     touchgfx::TextAreaWithOneWildcard textAreaTemp;
     touchgfx::TextAreaWithOneWildcard textAreaVolt;
     touchgfx::TextArea textArea3;
-    touchgfx::GraphWrapAndOverwrite<25> dynamicGraph1;
+    touchgfx::GraphWrapAndOverwrite<200> dynamicGraph1;
     touchgfx::GraphElementGridY dynamicGraph1MajorYAxisGrid;
     touchgfx::GraphElementLine dynamicGraph1Line1;
     touchgfx::PainterRGB565 dynamicGraph1Line1Painter;
     touchgfx::GraphElementVerticalGapLine dynamicGraph1VerticalFrontline;
-    touchgfx::GraphWrapAndOverwrite<25> dynamicGraph2;
-    touchgfx::GraphElementGridY dynamicGraph2MajorYAxisGrid;
-    touchgfx::GraphElementLine dynamicGraph2Line1;
-    touchgfx::PainterRGB565 dynamicGraph2Line1Painter;
-    touchgfx::GraphElementVerticalGapLine dynamicGraph2VerticalFrontline;
     touchgfx::TextArea textArea4;
-    touchgfx::TextArea textArea4_2;
     touchgfx::TextArea textArea4_1;
     touchgfx::TextArea textArea4_1_1_1_2;
     touchgfx::TextArea textArea4_1_1_1_1;
-    touchgfx::TextArea textArea4_1_1;
-    touchgfx::TextArea textArea4_1_1_1_2_1;
-    touchgfx::TextArea textArea4_1_1_1_1_1;
 
     /*
      * Wildcard Buffers

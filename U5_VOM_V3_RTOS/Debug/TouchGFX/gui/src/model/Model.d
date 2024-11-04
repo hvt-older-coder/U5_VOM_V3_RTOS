@@ -37,19 +37,8 @@ TouchGFX/gui/src/model/Model.o: ../TouchGFX/gui/src/model/Model.cpp \
  ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_tim.h \
  ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_tim_ex.h \
  ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_exti.h \
- ../Core/Inc/z_displ_ILI9XXX.h ../Core/Inc/app_freertos.h \
- ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
- ../Core/Inc/FreeRTOSConfig.h \
- ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h \
- ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h \
- ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h \
- ../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM33_NTZ/non_secure/portmacro.h \
- ../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM33_NTZ/non_secure/portmacrocommon.h \
- ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h \
- ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h \
- ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h \
- ../Core/Inc/main.h \
- ../Middlewares/Third_Party/CMSIS/RTOS2/Include/cmsis_os2.h
+ D:/U5/workspace/U5_VOM_V3_RTOS-main/U5_VOM_V3_RTOS/Drivers/BSP/z_displ_ILI9XXX.h \
+ D:/U5/workspace/U5_VOM_V3_RTOS-main/U5_VOM_V3_RTOS/Core/Inc/modules/modules.h
 ../TouchGFX/gui/include/gui/model/Model.hpp:
 ../TouchGFX/gui/include/gui/model/ModelListener.hpp:
 ../Core/Inc/main.h:
@@ -89,17 +78,5 @@ TouchGFX/gui/src/model/Model.o: ../TouchGFX/gui/src/model/Model.cpp \
 ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_tim.h:
 ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_tim_ex.h:
 ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_exti.h:
-../Core/Inc/z_displ_ILI9XXX.h:
-../Core/Inc/app_freertos.h:
-../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
-../Core/Inc/FreeRTOSConfig.h:
-../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h:
-../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h:
-../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h:
-../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM33_NTZ/non_secure/portmacro.h:
-../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM33_NTZ/non_secure/portmacrocommon.h:
-../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h:
-../Middlewares/Third_Party/FreeRTOS/Source/include/task.h:
-../Middlewares/Third_Party/FreeRTOS/Source/include/list.h:
-../Core/Inc/main.h:
-../Middlewares/Third_Party/CMSIS/RTOS2/Include/cmsis_os2.h:
+D:/U5/workspace/U5_VOM_V3_RTOS-main/U5_VOM_V3_RTOS/Drivers/BSP/z_displ_ILI9XXX.h:
+D:/U5/workspace/U5_VOM_V3_RTOS-main/U5_VOM_V3_RTOS/Core/Inc/modules/modules.h:

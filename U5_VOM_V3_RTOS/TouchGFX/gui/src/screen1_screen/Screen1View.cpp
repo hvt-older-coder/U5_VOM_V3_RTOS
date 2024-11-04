@@ -24,11 +24,6 @@ void Screen1View::updateTemp(unsigned int val)
 	Unicode::snprintf(textAreaTempBuffer,TEXTAREATEMP_SIZE, "%d", val);
 
 	textAreaTemp.invalidate();
-
-	dynamicGraph2.addDataPoint((float)val);
-	dynamicGraph2.invalidate();
-
-
 }
 
 void Screen1View::updateVolt(unsigned int val)
@@ -39,7 +34,7 @@ void Screen1View::updateVolt(unsigned int val)
 	textAreaVolt.invalidate();
 	//3300 - 100
 	//val - x
-	float gval = ((float)val)/1000; //in V
+	float gval = ((float)val)*4/(2^14); //in V
 	dynamicGraph1.addDataPoint(gval);
 	dynamicGraph1.invalidate();
 

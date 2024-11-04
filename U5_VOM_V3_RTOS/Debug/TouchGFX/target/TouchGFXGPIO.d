@@ -36,7 +36,7 @@ TouchGFX/target/TouchGFXGPIO.o: ../TouchGFX/target/TouchGFXGPIO.cpp \
  ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_tim.h \
  ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_tim_ex.h \
  ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_exti.h \
- ../Core/Inc/z_displ_ILI9XXX.h
+ D:/U5/workspace/U5_VOM_V3_RTOS-main/U5_VOM_V3_RTOS/Drivers/BSP/z_displ_ILI9XXX.h
 ../Middlewares/ST/touchgfx/framework/include/touchgfx/hal/GPIO.hpp:
 ../Core/Inc/main.h:
 ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal.h:
@@ -75,4 +75,4 @@ TouchGFX/target/TouchGFXGPIO.o: ../TouchGFX/target/TouchGFXGPIO.cpp \
 ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_tim.h:
 ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_tim_ex.h:
 ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_exti.h:
-../Core/Inc/z_displ_ILI9XXX.h:
+D:/U5/workspace/U5_VOM_V3_RTOS-main/U5_VOM_V3_RTOS/Drivers/BSP/z_displ_ILI9XXX.h:

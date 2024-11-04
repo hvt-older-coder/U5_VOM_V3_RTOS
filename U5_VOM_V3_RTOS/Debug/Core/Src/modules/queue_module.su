@@ -1,0 +1,4 @@
+../Core/Src/modules/queue_module.c:42:6:initQueues	16	static
+../Core/Src/modules/queue_module.c:52:6:ADC1_Queue_ReleaseSemaphore	16	static
+../Core/Src/modules/queue_module.c:64:5:ADC1_IN15_ReadDataFromQueue	16	static
+../Core/Src/modules/queue_module.c:77:6:ADC1_ReadDataFromDMABuffer	24	static

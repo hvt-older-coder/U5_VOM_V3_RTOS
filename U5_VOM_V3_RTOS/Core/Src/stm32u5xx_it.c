@@ -55,6 +55,9 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
+extern DMA_NodeTypeDef Node_GPDMA1_Channel10;
+extern DMA_QListTypeDef List_GPDMA1_Channel10;
+extern DMA_HandleTypeDef handle_GPDMA1_Channel10;
 extern DMA_HandleTypeDef handle_GPDMA1_Channel11;
 extern SPI_HandleTypeDef hspi1;
 extern TIM_HandleTypeDef htim3;
@@ -202,6 +205,20 @@ void TIM15_IRQHandler(void)
   /* USER CODE BEGIN TIM15_IRQn 1 */
 
   /* USER CODE END TIM15_IRQn 1 */
+}
+
+/**
+  * @brief This function handles GPDMA1 Channel 10 global interrupt.
+  */
+void GPDMA1_Channel10_IRQHandler(void)
+{
+  /* USER CODE BEGIN GPDMA1_Channel10_IRQn 0 */
+
+  /* USER CODE END GPDMA1_Channel10_IRQn 0 */
+  HAL_DMA_IRQHandler(&handle_GPDMA1_Channel10);
+  /* USER CODE BEGIN GPDMA1_Channel10_IRQn 1 */
+
+  /* USER CODE END GPDMA1_Channel10_IRQn 1 */
 }
 
 /**

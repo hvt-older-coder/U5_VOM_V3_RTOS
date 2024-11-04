@@ -46,9 +46,10 @@ Core/Src/app_freertos.o: ../Core/Src/app_freertos.c \
  ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_tim.h \
  ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_tim_ex.h \
  ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_exti.h \
- ../Core/Inc/z_displ_ILI9XXX.h \
+ D:/U5/workspace/U5_VOM_V3_RTOS-main/U5_VOM_V3_RTOS/Drivers/BSP/z_displ_ILI9XXX.h \
  ../Middlewares/Third_Party/CMSIS/RTOS2/Include/cmsis_os2.h \
- ../Core/Inc/main.h
+ ../Core/Inc/main.h \
+ D:/U5/workspace/U5_VOM_V3_RTOS-main/U5_VOM_V3_RTOS/Core/Inc/modules/modules.h
 ../Core/Inc/app_freertos.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 ../Core/Inc/FreeRTOSConfig.h:
@@ -97,6 +98,7 @@ Core/Src/app_freertos.o: ../Core/Src/app_freertos.c \
 ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_tim.h:
 ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_tim_ex.h:
 ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_exti.h:
-../Core/Inc/z_displ_ILI9XXX.h:
+D:/U5/workspace/U5_VOM_V3_RTOS-main/U5_VOM_V3_RTOS/Drivers/BSP/z_displ_ILI9XXX.h:
 ../Middlewares/Third_Party/CMSIS/RTOS2/Include/cmsis_os2.h:
 ../Core/Inc/main.h:
+D:/U5/workspace/U5_VOM_V3_RTOS-main/U5_VOM_V3_RTOS/Core/Inc/modules/modules.h:

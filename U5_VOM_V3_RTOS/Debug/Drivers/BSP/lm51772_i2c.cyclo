@@ -1,0 +1,4 @@
+../Drivers/BSP/lm51772_i2c.c:11:6:LM51772_Error_Handler	1
+../Drivers/BSP/lm51772_i2c.c:17:6:LM51772_ClearFaults	2
+../Drivers/BSP/lm51772_i2c.c:30:9:LM51722_Device_Ready	3
+../Drivers/BSP/lm51772_i2c.c:47:10:LM51722_Read_Vout_Target_mV	3

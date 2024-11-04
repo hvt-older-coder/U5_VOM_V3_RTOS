@@ -1,0 +1,3 @@
+../Core/Src/modules/task_list_module.c:39:6:peripherals_init	1
+../Core/Src/modules/task_list_module.c:46:6:InputTask	1
+../Core/Src/modules/task_list_module.c:58:6:init_tasks	3

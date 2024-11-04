@@ -1,0 +1,5 @@
+../Core/Src/modules/isr_module.c:15:6:ADC1_Init_DMA	3
+../Core/Src/modules/isr_module.c:28:6:HAL_ADC_ConvHalfCpltCallback	2
+../Core/Src/modules/isr_module.c:34:6:HAL_ADC_ConvCpltCallback	2
+../Core/Src/modules/isr_module.c:45:6:PWM_ISR_Callback	1
+../Core/Src/modules/isr_module.c:51:6:BUTTON_ISR_Callback	1

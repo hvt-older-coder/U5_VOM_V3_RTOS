@@ -35,7 +35,8 @@ Core/Src/stm32u5xx_it.o: ../Core/Src/stm32u5xx_it.c ../Core/Inc/main.h \
  ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_tim.h \
  ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_tim_ex.h \
  ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_exti.h \
- ../Core/Inc/z_displ_ILI9XXX.h ../Core/Inc/stm32u5xx_it.h
+ D:/U5/workspace/U5_VOM_V3_RTOS-main/U5_VOM_V3_RTOS/Drivers/BSP/z_displ_ILI9XXX.h \
+ ../Core/Inc/stm32u5xx_it.h
 ../Core/Inc/main.h:
 ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal.h:
 ../Core/Inc/stm32u5xx_hal_conf.h:
@@ -73,5 +74,5 @@ Core/Src/stm32u5xx_it.o: ../Core/Src/stm32u5xx_it.c ../Core/Inc/main.h \
 ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_tim.h:
 ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_tim_ex.h:
 ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_exti.h:
-../Core/Inc/z_displ_ILI9XXX.h:
+D:/U5/workspace/U5_VOM_V3_RTOS-main/U5_VOM_V3_RTOS/Drivers/BSP/z_displ_ILI9XXX.h:
 ../Core/Inc/stm32u5xx_it.h:

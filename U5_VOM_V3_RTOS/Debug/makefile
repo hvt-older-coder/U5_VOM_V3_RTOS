@@ -15,7 +15,6 @@ RM := rm -rf
 -include TouchGFX/gui/src/model/subdir.mk
 -include TouchGFX/gui/src/common/subdir.mk
 -include TouchGFX/generated/texts/src/subdir.mk
--include TouchGFX/generated/images/src/__generated/subdir.mk
 -include TouchGFX/generated/images/src/subdir.mk
 -include TouchGFX/generated/gui_generated/src/screen1_screen/subdir.mk
 -include TouchGFX/generated/gui_generated/src/common/subdir.mk
@@ -39,7 +38,9 @@ RM := rm -rf
 -include Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/subdir.mk
 -include Middlewares/Third_Party/FreeRTOS/Source/subdir.mk
 -include Drivers/STM32U5xx_HAL_Driver/Src/subdir.mk
+-include Drivers/BSP/subdir.mk
 -include Core/Startup/subdir.mk
+-include Core/Src/modules/subdir.mk
 -include Core/Src/subdir.mk
 -include objects.mk
 

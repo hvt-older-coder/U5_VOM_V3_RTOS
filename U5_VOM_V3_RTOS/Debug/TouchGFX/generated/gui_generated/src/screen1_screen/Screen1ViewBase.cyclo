@@ -192,17 +192,17 @@
 ../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/graph/GraphElements.hpp:281:7:virtual touchgfx::GraphElementGridBase::~GraphElementGridBase()	1
 ../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/graph/GraphElements.hpp:618:7:touchgfx::GraphElementGridY::GraphElementGridY()	1
 ../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/graph/GraphElements.hpp:847:7:touchgfx::GraphElementVerticalGapLine::GraphElementVerticalGapLine()	1
-../TouchGFX/generated/gui_generated/src/screen1_screen/Screen1ViewBase.cpp:9:1:Screen1ViewBase::Screen1ViewBase()	51
-../TouchGFX/generated/gui_generated/src/screen1_screen/Screen1ViewBase.cpp:198:1:Screen1ViewBase::~Screen1ViewBase()	1
-../TouchGFX/generated/gui_generated/src/screen1_screen/Screen1ViewBase.cpp:198:1:virtual Screen1ViewBase::~Screen1ViewBase()	1
-../TouchGFX/generated/gui_generated/src/screen1_screen/Screen1ViewBase.cpp:203:6:virtual void Screen1ViewBase::setupScreen()	1
+../TouchGFX/generated/gui_generated/src/screen1_screen/Screen1ViewBase.cpp:9:1:Screen1ViewBase::Screen1ViewBase()	201
+../TouchGFX/generated/gui_generated/src/screen1_screen/Screen1ViewBase.cpp:299:1:Screen1ViewBase::~Screen1ViewBase()	1
+../TouchGFX/generated/gui_generated/src/screen1_screen/Screen1ViewBase.cpp:299:1:virtual Screen1ViewBase::~Screen1ViewBase()	1
+../TouchGFX/generated/gui_generated/src/screen1_screen/Screen1ViewBase.cpp:304:6:virtual void Screen1ViewBase::setupScreen()	1
 ../Middlewares/ST/touchgfx/framework/include/touchgfx/Utils.hpp:105:3:T touchgfx::abs(T) [with T = int]	1
 ../Middlewares/ST/touchgfx/framework/include/mvp/View.hpp:39:5:touchgfx::View<T>::View() [with T = Screen1Presenter]	1
 ../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/graph/GraphWrapAndOverwrite.hpp:31:7:touchgfx::GraphWrapAndOverwriteData::~GraphWrapAndOverwriteData()	1
 ../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/graph/GraphWrapAndOverwrite.hpp:31:7:virtual touchgfx::GraphWrapAndOverwriteData::~GraphWrapAndOverwriteData()	1
-../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/graph/GraphWrapAndOverwrite.hpp:66:5:touchgfx::GraphWrapAndOverwrite<CAPACITY>::GraphWrapAndOverwrite() [with short int CAPACITY = 25]	1
-../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/graph/GraphWrapAndOverwrite.hpp:63:7:touchgfx::GraphWrapAndOverwrite<25>::~GraphWrapAndOverwrite()	1
-../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/graph/GraphWrapAndOverwrite.hpp:63:7:virtual touchgfx::GraphWrapAndOverwrite<25>::~GraphWrapAndOverwrite()	1
+../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/graph/GraphWrapAndOverwrite.hpp:66:5:touchgfx::GraphWrapAndOverwrite<CAPACITY>::GraphWrapAndOverwrite() [with short int CAPACITY = 200]	1
+../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/graph/GraphWrapAndOverwrite.hpp:63:7:touchgfx::GraphWrapAndOverwrite<200>::~GraphWrapAndOverwrite()	1
+../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/graph/GraphWrapAndOverwrite.hpp:63:7:virtual touchgfx::GraphWrapAndOverwrite<200>::~GraphWrapAndOverwrite()	1
 ../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/graph/GraphElements.hpp:618:7:touchgfx::GraphElementGridY::~GraphElementGridY()	1
 ../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/graph/GraphElements.hpp:618:7:virtual touchgfx::GraphElementGridY::~GraphElementGridY()	1
 ../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextAreaWithWildcard.hpp:62:7:touchgfx::TextAreaWithOneWildcard::~TextAreaWithOneWildcard()	1
