@@ -9,10 +9,10 @@
 #include <gui/screen1_screen/Screen1Presenter.hpp>
 #include <touchgfx/widgets/Box.hpp>
 #include <touchgfx/widgets/TextAreaWithWildcard.hpp>
-#include <touchgfx/widgets/TextArea.hpp>
 #include <touchgfx/widgets/graph/GraphWrapAndOverwrite.hpp>
 #include <touchgfx/widgets/graph/GraphElements.hpp>
 #include <touchgfx/widgets/canvas/PainterRGB565.hpp>
+#include <touchgfx/widgets/TextArea.hpp>
 
 class Screen1ViewBase : public touchgfx::View<Screen1Presenter>
 {
@@ -32,9 +32,7 @@ protected:
     touchgfx::Box __background;
     touchgfx::Box box1;
     touchgfx::Box box2;
-    touchgfx::TextAreaWithOneWildcard textAreaTemp;
     touchgfx::TextAreaWithOneWildcard textAreaVolt;
-    touchgfx::TextArea textArea3;
     touchgfx::GraphWrapAndOverwrite<200> dynamicGraph1;
     touchgfx::GraphElementGridY dynamicGraph1MajorYAxisGrid;
     touchgfx::GraphElementLine dynamicGraph1Line1;
@@ -48,8 +46,6 @@ protected:
     /*
      * Wildcard Buffers
      */
-    static const uint16_t TEXTAREATEMP_SIZE = 5;
-    touchgfx::Unicode::UnicodeChar textAreaTempBuffer[TEXTAREATEMP_SIZE];
     static const uint16_t TEXTAREAVOLT_SIZE = 5;
     touchgfx::Unicode::UnicodeChar textAreaVoltBuffer[TEXTAREAVOLT_SIZE];
 

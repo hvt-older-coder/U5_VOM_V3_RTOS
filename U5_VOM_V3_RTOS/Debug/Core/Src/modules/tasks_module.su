@@ -1,0 +1,4 @@
+../Core/Src/modules/tasks_module.c:50:6:Init_Tasks	16	static
+../Core/Src/modules/tasks_module.c:69:6:Peripherals_Init	8	static
+../Core/Src/modules/tasks_module.c:77:6:InputTask	16	static
+../Core/Src/modules/tasks_module.c:100:6:I2CTask	16	static

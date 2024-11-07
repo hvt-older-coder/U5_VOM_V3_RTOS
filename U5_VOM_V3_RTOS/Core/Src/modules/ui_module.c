@@ -12,8 +12,8 @@
 #include "task.h"
 #include "main.h"
 #include "cmsis_os2.h"
-
-int UI_GetADC1_IN16_Data()
-{
-	return ADC1_IN15_ReadDataFromQueue();
-}
+//
+//int UI_GetADC1_IN16_Data()
+//{
+//	return ADC1_IN15_ReadDataFromQueue();
+//}

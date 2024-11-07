@@ -92,7 +92,7 @@ void MX_FREERTOS_Init(void) {
   /* add threads, ... */
   //Remove default task.
 
-  init_tasks();
+  Init_Tasks();
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */

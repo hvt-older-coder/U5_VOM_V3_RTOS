@@ -16,7 +16,7 @@ Model::Model() : modelListener(0)
 void Model::tick()
 {
 #ifndef SIMULATOR
-	int ret = UI_GetADC1_IN16_Data();
+	int ret = ADC1_IN15_ReadDataFromQueue();
 	if(ret != -1)
 	{
 		modelListener->updateVolt(ret);

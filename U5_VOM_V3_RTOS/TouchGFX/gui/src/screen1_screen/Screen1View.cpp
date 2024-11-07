@@ -19,13 +19,13 @@ void Screen1View::updateTemp(unsigned int val)
 {
 	//update ui.
 
-	memset((void*)textAreaTempBuffer, 0, TEXTAREATEMP_SIZE*2);
+	//memset((void*)textAreaTempBuffer, 0, TEXTAREATEMP_SIZE*2);
 
-	Unicode::snprintf(textAreaTempBuffer,TEXTAREATEMP_SIZE, "%d", val);
+	//Unicode::snprintf(textAreaTempBuffer,TEXTAREATEMP_SIZE, "%d", val);
 
-	textAreaTemp.invalidate();
+	//textAreaTemp.invalidate();
 }
-
+//static int point_count = 0;
 void Screen1View::updateVolt(unsigned int val)
 {
 	//update ui.
@@ -34,7 +34,12 @@ void Screen1View::updateVolt(unsigned int val)
 	textAreaVolt.invalidate();
 	//3300 - 100
 	//val - x
-	float gval = ((float)val)*4/(2^14); //in V
+	if(count_point++ == dynamicGraph1.getMaxCapacity())
+	{
+		count_point = 0;
+		dynamicGraph1.clear();
+	}
+	float gval = ((float)val)/1000; //in V
 	dynamicGraph1.addDataPoint(gval);
 	dynamicGraph1.invalidate();
 

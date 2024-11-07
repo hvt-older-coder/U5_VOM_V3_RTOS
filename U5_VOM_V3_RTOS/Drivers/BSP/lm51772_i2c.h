@@ -8,6 +8,8 @@
 #ifndef INC_LM51772_I2C_H_
 #define INC_LM51772_I2C_H_
 
+#include "stdint.h"
+
 #define LM51722_VOUT_STEP_SIZE 20 						//mV
 #define LM51772_I2C_ADDR 					(0x6A << 1) //0xD4
 
@@ -39,5 +41,8 @@
 #define LM51722_STATUS_BYTE_CML 		(1<<1)
 #define LM51722_STATUS_BYTE_OTHER 	(1<<0)
 
+void LM51772_ClearFaults();
+uint8_t LM51722_Device_Ready();
+uint16_t LM51722_Read_Vout_Target_mV();
 
 #endif /* INC_LM51772_I2C_H_ */

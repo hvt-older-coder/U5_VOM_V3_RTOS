@@ -1,0 +1,3 @@
+../Core/Src/modules/adc_module.c:17:6:ADC1_Calibration	8	static
+../Core/Src/modules/adc_module.c:25:6:ADC1_Start_DMA_Conv	8	static
+../Core/Src/modules/adc_module.c:32:10:ADC1_Convert_Data_To_V	16	static

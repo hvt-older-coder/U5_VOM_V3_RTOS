@@ -8,4 +8,4 @@
 ../TouchGFX/gui/src/screen1_screen/Screen1View.cpp:8:6:virtual void Screen1View::setupScreen()	1
 ../TouchGFX/gui/src/screen1_screen/Screen1View.cpp:13:6:virtual void Screen1View::tearDownScreen()	1
 ../TouchGFX/gui/src/screen1_screen/Screen1View.cpp:18:6:virtual void Screen1View::updateTemp(unsigned int)	1
-../TouchGFX/gui/src/screen1_screen/Screen1View.cpp:29:6:virtual void Screen1View::updateVolt(unsigned int)	2
+../TouchGFX/gui/src/screen1_screen/Screen1View.cpp:29:6:virtual void Screen1View::updateVolt(unsigned int)	3

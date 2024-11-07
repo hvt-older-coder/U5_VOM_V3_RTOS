@@ -1,0 +1,4 @@
+../Core/Src/modules/semaphore_module.c:24:6:InitSemaphore	16	static
+../Core/Src/modules/semaphore_module.c:38:9:TakeSemaphoreByName	16	static
+../Core/Src/modules/semaphore_module.c:42:9:GiveSemaphoreFromISRByName	16	static
+../Core/Src/modules/semaphore_module.c:46:9:GiveSemaphoreByName	16	static

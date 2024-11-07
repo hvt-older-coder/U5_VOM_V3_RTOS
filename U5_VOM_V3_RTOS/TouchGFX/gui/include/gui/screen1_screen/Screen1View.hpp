@@ -15,6 +15,7 @@ public:
     virtual void updateVolt(unsigned int val);
 
 protected:
+    int16_t count_point;
 };
 
 #endif // SCREEN1VIEW_HPP

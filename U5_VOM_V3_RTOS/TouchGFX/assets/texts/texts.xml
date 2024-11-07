@@ -18,20 +18,11 @@
       <Text Id="__SingleUse_FGFY" Alignment="Left" TypographyId="Small">
         <Translation Language="GB">V-graph</Translation>
       </Text>
-      <Text Id="__SingleUse_U2NK" Alignment="Left" TypographyId="Default">
-        <Translation Language="GB">0000</Translation>
-      </Text>
-      <Text Id="__SingleUse_2HIB" Alignment="Left" TypographyId="Default">
-        <Translation Language="GB">RTOS GFX 4.24.1</Translation>
-      </Text>
       <Text Id="__SingleUse_D9QQ" Alignment="Left" TypographyId="Small">
         <Translation Language="GB">0000</Translation>
       </Text>
       <Text Id="__SingleUse_J8LP" Alignment="Left" TypographyId="Small">
         <Translation Language="GB">Volt(mV):&lt;value&gt;</Translation>
-      </Text>
-      <Text Id="__SingleUse_O79F" Alignment="Left" TypographyId="Small">
-        <Translation Language="GB">Sys temp(°C):&lt;value&gt;</Translation>
       </Text>
     </TextGroup>
   </Texts>

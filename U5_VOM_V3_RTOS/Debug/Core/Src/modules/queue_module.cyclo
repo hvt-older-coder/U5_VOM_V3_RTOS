@@ -1,4 +1,5 @@
-../Core/Src/modules/queue_module.c:42:6:initQueues	2
-../Core/Src/modules/queue_module.c:52:6:ADC1_Queue_ReleaseSemaphore	2
-../Core/Src/modules/queue_module.c:64:5:ADC1_IN15_ReadDataFromQueue	2
-../Core/Src/modules/queue_module.c:77:6:ADC1_ReadDataFromDMABuffer	7
+../Core/Src/modules/queue_module.c:43:6:initQueues	2
+../Core/Src/modules/queue_module.c:51:20:GetQueueHandleByName	1
+../Core/Src/modules/queue_module.c:56:5:ADC1_IN15_ReadDataFromQueue	2
+../Core/Src/modules/queue_module.c:70:6:FeedDataToQueueFromADC_DMABuffer	3
+../Core/Src/modules/queue_module.c:97:6:I2C_ReadVoutPutToQueue	1
