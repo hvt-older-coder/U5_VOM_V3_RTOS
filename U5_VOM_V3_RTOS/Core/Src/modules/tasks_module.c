@@ -72,7 +72,8 @@ void Peripherals_Init()
 	//The Application level init will be done here.
 	Setup_LCD_TouchGFX();
 	ADC1_Calibration();
-	I2C_Device_Init();
+
+	//I2C_Device_Init();
 }
 void InputTask(void *argument)
 {
@@ -102,7 +103,9 @@ void I2CTask(void *argument)
   /* Infinite loop */
 	for(;;)
 	{
+#if 0
 		I2C_ReadVoutPutToQueue();
+#endif
 		osDelay(TASK_I2C_INTERVAL_50MS);
 	}
 }

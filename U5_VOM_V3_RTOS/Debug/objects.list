@@ -10,6 +10,7 @@
 "./Core/Src/modules/i2c_module.o"
 "./Core/Src/modules/isr_module.o"
 "./Core/Src/modules/queue_module.o"
+"./Core/Src/modules/rotary_switch_module.o"
 "./Core/Src/modules/semaphore_module.o"
 "./Core/Src/modules/tasks_module.o"
 "./Core/Src/modules/ui_module.o"

@@ -73,6 +73,8 @@ void Setup_LCD_TouchGFX();
 #define LED_GREEN_GPIO_Port GPIOA
 #define DISPL_DC_Pin GPIO_PIN_8
 #define DISPL_DC_GPIO_Port GPIOA
+#define LED_INDICATOR_Pin GPIO_PIN_4
+#define LED_INDICATOR_GPIO_Port GPIOB
 #define DISPL_CS_Pin GPIO_PIN_8
 #define DISPL_CS_GPIO_Port GPIOB
 

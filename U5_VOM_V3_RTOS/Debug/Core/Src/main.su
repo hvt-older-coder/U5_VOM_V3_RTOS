@@ -11,5 +11,5 @@
 ../Core/Src/main.c:484:13:MX_SPI1_Init	24	static
 ../Core/Src/main.c:541:13:MX_TIM3_Init	40	static
 ../Core/Src/main.c:586:13:MX_GPIO_Init	40	static
-../Core/Src/main.c:650:6:HAL_TIM_PeriodElapsedCallback	16	static
-../Core/Src/main.c:679:6:Error_Handler	4	static,ignoring_inline_asm
+../Core/Src/main.c:657:6:HAL_TIM_PeriodElapsedCallback	16	static
+../Core/Src/main.c:686:6:Error_Handler	4	static,ignoring_inline_asm

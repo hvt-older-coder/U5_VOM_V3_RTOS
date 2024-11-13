@@ -19,8 +19,8 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 	//Keep it short here.
 	if(hadc->Instance == ADC1)
 	{
-		//ADC1_Queue_ReleaseSemaphore(1);
 		//HAL_ADC_Stop_DMA(hadc);
+		//Give the semaphore to the InputTask to run and feed data to Queue.
 		GiveSemaphoreFromISRByName(ADC_COMPLETE_SEM);
 	}
 

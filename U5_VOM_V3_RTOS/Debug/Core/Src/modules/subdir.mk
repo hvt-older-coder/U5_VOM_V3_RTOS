@@ -9,6 +9,7 @@ C_SRCS += \
 ../Core/Src/modules/i2c_module.c \
 ../Core/Src/modules/isr_module.c \
 ../Core/Src/modules/queue_module.c \
+../Core/Src/modules/rotary_switch_module.c \
 ../Core/Src/modules/semaphore_module.c \
 ../Core/Src/modules/tasks_module.c \
 ../Core/Src/modules/ui_module.c 
@@ -18,6 +19,7 @@ C_DEPS += \
 ./Core/Src/modules/i2c_module.d \
 ./Core/Src/modules/isr_module.d \
 ./Core/Src/modules/queue_module.d \
+./Core/Src/modules/rotary_switch_module.d \
 ./Core/Src/modules/semaphore_module.d \
 ./Core/Src/modules/tasks_module.d \
 ./Core/Src/modules/ui_module.d 
@@ -27,6 +29,7 @@ OBJS += \
 ./Core/Src/modules/i2c_module.o \
 ./Core/Src/modules/isr_module.o \
 ./Core/Src/modules/queue_module.o \
+./Core/Src/modules/rotary_switch_module.o \
 ./Core/Src/modules/semaphore_module.o \
 ./Core/Src/modules/tasks_module.o \
 ./Core/Src/modules/ui_module.o 
@@ -39,7 +42,7 @@ Core/Src/modules/%.o Core/Src/modules/%.su Core/Src/modules/%.cyclo: ../Core/Src
 clean: clean-Core-2f-Src-2f-modules
 
 clean-Core-2f-Src-2f-modules:
-	-$(RM) ./Core/Src/modules/adc_module.cyclo ./Core/Src/modules/adc_module.d ./Core/Src/modules/adc_module.o ./Core/Src/modules/adc_module.su ./Core/Src/modules/i2c_module.cyclo ./Core/Src/modules/i2c_module.d ./Core/Src/modules/i2c_module.o ./Core/Src/modules/i2c_module.su ./Core/Src/modules/isr_module.cyclo ./Core/Src/modules/isr_module.d ./Core/Src/modules/isr_module.o ./Core/Src/modules/isr_module.su ./Core/Src/modules/queue_module.cyclo ./Core/Src/modules/queue_module.d ./Core/Src/modules/queue_module.o ./Core/Src/modules/queue_module.su ./Core/Src/modules/semaphore_module.cyclo ./Core/Src/modules/semaphore_module.d ./Core/Src/modules/semaphore_module.o ./Core/Src/modules/semaphore_module.su ./Core/Src/modules/tasks_module.cyclo ./Core/Src/modules/tasks_module.d ./Core/Src/modules/tasks_module.o ./Core/Src/modules/tasks_module.su ./Core/Src/modules/ui_module.cyclo ./Core/Src/modules/ui_module.d ./Core/Src/modules/ui_module.o ./Core/Src/modules/ui_module.su
+	-$(RM) ./Core/Src/modules/adc_module.cyclo ./Core/Src/modules/adc_module.d ./Core/Src/modules/adc_module.o ./Core/Src/modules/adc_module.su ./Core/Src/modules/i2c_module.cyclo ./Core/Src/modules/i2c_module.d ./Core/Src/modules/i2c_module.o ./Core/Src/modules/i2c_module.su ./Core/Src/modules/isr_module.cyclo ./Core/Src/modules/isr_module.d ./Core/Src/modules/isr_module.o ./Core/Src/modules/isr_module.su ./Core/Src/modules/queue_module.cyclo ./Core/Src/modules/queue_module.d ./Core/Src/modules/queue_module.o ./Core/Src/modules/queue_module.su ./Core/Src/modules/rotary_switch_module.cyclo ./Core/Src/modules/rotary_switch_module.d ./Core/Src/modules/rotary_switch_module.o ./Core/Src/modules/rotary_switch_module.su ./Core/Src/modules/semaphore_module.cyclo ./Core/Src/modules/semaphore_module.d ./Core/Src/modules/semaphore_module.o ./Core/Src/modules/semaphore_module.su ./Core/Src/modules/tasks_module.cyclo ./Core/Src/modules/tasks_module.d ./Core/Src/modules/tasks_module.o ./Core/Src/modules/tasks_module.su ./Core/Src/modules/ui_module.cyclo ./Core/Src/modules/ui_module.d ./Core/Src/modules/ui_module.o ./Core/Src/modules/ui_module.su
 
 .PHONY: clean-Core-2f-Src-2f-modules
 
